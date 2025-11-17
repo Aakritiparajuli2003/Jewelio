@@ -1,4 +1,4 @@
-# jewelio
+# Jewelio
 
 A new Flutter project.
 
