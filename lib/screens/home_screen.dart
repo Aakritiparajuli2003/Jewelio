@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 
-class JewelioHomePage extends StatefulWidget {
-  const JewelioHomePage({Key? key}) : super(key: key);
+class HomePage extends StatefulWidget {
+  const HomePage({Key? key}) : super(key: key);
 
   @override
-  State<JewelioHomePage> createState() => _JewelioHomePageState();
+  State<HomePage> createState() => _HomePageState();
 }
 
-class _JewelioHomePageState extends State<JewelioHomePage> {
+class _HomePageState extends State<HomePage> {
   int currentIndex = 0;
 
   @override
