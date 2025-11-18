@@ -4,6 +4,8 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:jewelio/home_screen.dart';
+import 'package:jewelio/signup_screen.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -29,15 +31,22 @@ class _LoginScreenState extends State<LoginScreen> {
       );
 
       if (!mounted) return;
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Login Successful')),
-      );
-      
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(const SnackBar(content: Text('Login Successful')));
+
+      // Wait 2 seconds before navigating
+      Future.delayed(const Duration(seconds: 2), () {
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (context) => HomeScreen()),
+        );
+      });
     } catch (e) {
       if (!mounted) return;
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Login Failed: $e')),
-      );
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text('Login Failed: $e')));
     } finally {
       if (mounted) setState(() => isLoading = false);
     }
@@ -57,15 +66,14 @@ class _LoginScreenState extends State<LoginScreen> {
       });
 
       if (!mounted) return;
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Sign Up Successful')),
-      );
-      
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(const SnackBar(content: Text('Sign Up Successful')));
     } catch (e) {
       if (!mounted) return;
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Sign Up Failed: $e')),
-      );
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text('Sign Up Failed: $e')));
     } finally {
       if (mounted) setState(() => isLoading = false);
     }
@@ -81,9 +89,9 @@ class _LoginScreenState extends State<LoginScreen> {
       );
     } catch (e) {
       if (!mounted) return;
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Reset failed: $e')),
-      );
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text('Reset failed: $e')));
     }
   }
 
@@ -93,10 +101,7 @@ class _LoginScreenState extends State<LoginScreen> {
       body: Stack(
         children: [
           Positioned.fill(
-            child: Image.asset(
-              'assets/2.png',
-              fit: BoxFit.cover,
-            ),
+            child: Image.asset('assets/2.png', fit: BoxFit.cover),
           ),
 
           // Center bubble UI
@@ -106,7 +111,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 width: 350,
                 padding: const EdgeInsets.all(25),
                 decoration: BoxDecoration(
-                  color:const Color.fromRGBO(255, 255, 255, 0.6),
+                  color: const Color.fromRGBO(255, 255, 255, 0.6),
                   borderRadius: BorderRadius.circular(200),
                   border: Border.all(color: Colors.white54, width: 2),
                 ),
@@ -129,7 +134,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       decoration: InputDecoration(
                         labelText: 'Email',
                         filled: true,
-                        fillColor:const Color.fromRGBO(255, 255, 255, 0.6),
+                        fillColor: const Color.fromRGBO(255, 255, 255, 0.6),
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(15),
                         ),
@@ -145,7 +150,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       decoration: InputDecoration(
                         labelText: 'Password',
                         filled: true,
-                        fillColor:const Color.fromRGBO(255, 255, 255, 0.6),
+                        fillColor: const Color.fromRGBO(255, 255, 255, 0.6),
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(15),
                         ),
@@ -165,7 +170,14 @@ class _LoginScreenState extends State<LoginScreen> {
                           ),
                         ),
                         TextButton(
-                          onPressed: signUp,
+                          onPressed: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => const SignupScreen(),
+                              ),
+                            );
+                          },
                           child: const Text(
                             'Sign Up',
                             style: TextStyle(color: Colors.blueAccent),
@@ -193,7 +205,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 ),
               ),
             ),
-          )
+          ),
         ],
       ),
     );
