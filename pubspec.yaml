@@ -25,3 +25,7 @@ flutter:
   assets:
     - assets/2.png
     - assets/Logo.png
+    - assets/banner.jpg
+    - assets/new.jpg
+    - assets/best.jpg
+    - assets/gift.jpg
