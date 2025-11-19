@@ -1,5 +1,3 @@
-// Flutter login + signup UI similar to provided design
-// Paste into your project and adjust assets, fonts, and Firebase imports
 
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -101,7 +99,7 @@ class _LoginScreenState extends State<LoginScreen> {
       body: Stack(
         children: [
           Positioned.fill(
-            child: Image.asset('assets/2.png', fit: BoxFit.cover),
+            child: Image.asset('assets/3.jpg', fit: BoxFit.cover),
           ),
 
           // Center bubble UI
@@ -128,7 +126,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     ),
                     const SizedBox(height: 20),
 
-                    // Email field
+                   
                     TextField(
                       controller: emailController,
                       decoration: InputDecoration(
@@ -143,7 +141,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
                     const SizedBox(height: 15),
 
-                    // Password
+                 
                     TextField(
                       controller: passwordController,
                       obscureText: true,

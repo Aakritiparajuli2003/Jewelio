@@ -49,7 +49,7 @@ class _HomePageState extends State<HomePage> {
       body: SingleChildScrollView(
         child: Column(
           children: [
-            // 🔍 Search Bar
+          
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
               child: TextField(
@@ -65,7 +65,7 @@ class _HomePageState extends State<HomePage> {
 
             const SizedBox(height: 10),
 
-            // 🖼 Banner / Slider Placeholder
+          
             Container(
               margin: const EdgeInsets.symmetric(horizontal: 20),
               height: 200,
@@ -89,7 +89,6 @@ class _HomePageState extends State<HomePage> {
 
             const SizedBox(height: 10),
 
-            // 🆕 New Arrival & Best Seller Cards
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
@@ -107,7 +106,7 @@ class _HomePageState extends State<HomePage> {
 
             const SizedBox(height: 15),
 
-            // 🎁 Gift Banner
+           
             Container(
               height: 170,
               margin: const EdgeInsets.symmetric(horizontal: 20),
@@ -124,7 +123,6 @@ class _HomePageState extends State<HomePage> {
         ),
       ),
 
-      // 🔽 Bottom Navigation
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: currentIndex,
         selectedItemColor: Colors.redAccent,
@@ -143,7 +141,7 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  // 🔹 Product Card Widget
+ 
   Widget productCard(String title, String imagePath) {
     return Container(
       width: 160,
