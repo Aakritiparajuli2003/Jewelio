@@ -10,14 +10,22 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+<<<<<<< HEAD
   cupertino_icons: ^1.0.8
   firebase_core: ^4.2.1  
   firebase_auth: ^6.1.2
   cloud_firestore: ^6.1.0  
+=======
+
+  cupertino_icons: ^1.0.8
+  google_fonts: ^6.2.1
+
+>>>>>>> 5b35bb3 (Initial commit)
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
+<<<<<<< HEAD
   flutter_lints: ^6.0.0
 
 flutter:
@@ -31,3 +39,14 @@ flutter:
     - assets/gift.jpg
     - assets/signup.jpg
 
+=======
+
+  flutter_lints: ^5.0.0
+
+flutter:
+  uses-material-design: true
+
+  assets:
+    - assets/
+    - assets/images/
+>>>>>>> 5b35bb3 (Initial commit)
