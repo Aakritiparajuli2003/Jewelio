@@ -20,27 +20,34 @@ class _HomePageState extends State<HomePage> {
         title: const Text(
           "Jewelio",
           style: TextStyle(
-              fontSize: 30, fontWeight: FontWeight.bold, letterSpacing: 1),
+            fontSize: 30,
+            fontWeight: FontWeight.bold,
+            letterSpacing: 1,
+          ),
         ),
         actions: [
-          IconButton(
-              onPressed: () {}, icon: const Icon(Icons.favorite_border)),
+          IconButton(onPressed: () {}, icon: const Icon(Icons.favorite_border)),
           Stack(
             children: [
-              IconButton(onPressed: () {}, icon: const Icon(Icons.shopping_cart)),
+              IconButton(
+                onPressed: () {},
+                icon: const Icon(Icons.shopping_cart),
+              ),
               Positioned(
                 right: 6,
                 top: 6,
                 child: Container(
                   padding: const EdgeInsets.all(3),
                   decoration: const BoxDecoration(
-                      color: Colors.red, shape: BoxShape.circle),
+                    color: Colors.red,
+                    shape: BoxShape.circle,
+                  ),
                   child: const Text(
                     "4",
                     style: TextStyle(color: Colors.white, fontSize: 10),
                   ),
                 ),
-              )
+              ),
             ],
           ),
         ],
@@ -49,7 +56,6 @@ class _HomePageState extends State<HomePage> {
       body: SingleChildScrollView(
         child: Column(
           children: [
-          
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
               child: TextField(
@@ -58,14 +64,14 @@ class _HomePageState extends State<HomePage> {
                   prefixIcon: const Icon(Icons.search),
                   contentPadding: const EdgeInsets.symmetric(vertical: 10),
                   border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(30)),
+                    borderRadius: BorderRadius.circular(30),
+                  ),
                 ),
               ),
             ),
 
             const SizedBox(height: 10),
 
-          
             Container(
               margin: const EdgeInsets.symmetric(horizontal: 20),
               height: 200,
@@ -84,8 +90,10 @@ class _HomePageState extends State<HomePage> {
               "Jewelio Special",
               style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
             ),
-            const Text("Our top picks, just for you!",
-                style: TextStyle(fontSize: 14)),
+            const Text(
+              "Our top picks, just for you!",
+              style: TextStyle(fontSize: 14),
+            ),
 
             const SizedBox(height: 10),
 
@@ -99,14 +107,14 @@ class _HomePageState extends State<HomePage> {
 
             const SizedBox(height: 25),
 
-            const Text("Gifting",
-                style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold)),
-            const Text("Find the perfect gift",
-                style: TextStyle(fontSize: 14)),
+            const Text(
+              "Gifting",
+              style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
+            ),
+            const Text("Find the perfect gift", style: TextStyle(fontSize: 14)),
 
             const SizedBox(height: 15),
 
-           
             Container(
               height: 170,
               margin: const EdgeInsets.symmetric(horizontal: 20),
@@ -134,14 +142,16 @@ class _HomePageState extends State<HomePage> {
           BottomNavigationBarItem(icon: Icon(Icons.home), label: "Home"),
           BottomNavigationBarItem(icon: Icon(Icons.search), label: "Search"),
           BottomNavigationBarItem(icon: Icon(Icons.store), label: "Store"),
-          BottomNavigationBarItem(icon: Icon(Icons.shopping_cart), label: "Cart"),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.shopping_cart),
+            label: "Cart",
+          ),
           BottomNavigationBarItem(icon: Icon(Icons.person), label: "Profile"),
         ],
       ),
     );
   }
 
- 
   Widget productCard(String title, String imagePath) {
     return Container(
       width: 160,
@@ -155,14 +165,21 @@ class _HomePageState extends State<HomePage> {
         width: double.infinity,
         padding: const EdgeInsets.all(8),
         decoration: BoxDecoration(
-            color: const Color.fromRGBO(255, 255, 255, 0.6),
-            borderRadius: const BorderRadius.only(
-                bottomLeft: Radius.circular(15),
-                bottomRight: Radius.circular(15))),
+          color: const Color.fromRGBO(255, 255, 255, 0.6),
+          borderRadius: const BorderRadius.only(
+            bottomLeft: Radius.circular(15),
+            bottomRight: Radius.circular(15),
+          ),
+        ),
         child: Center(
-          child: Text(title,
-              style: const TextStyle(
-                  fontSize: 16, fontWeight: FontWeight.bold, color: Colors.red)),
+          child: Text(
+            title,
+            style: const TextStyle(
+              fontSize: 16,
+              fontWeight: FontWeight.bold,
+              color: Colors.red,
+            ),
+          ),
         ),
       ),
     );

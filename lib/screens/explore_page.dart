@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-
 class ExplorePage extends StatelessWidget {
   ExplorePage({super.key});
 
@@ -9,32 +8,32 @@ class ExplorePage extends StatelessWidget {
     {
       "image": "assets/p1.jpg",
       "price": "\$23.33",
-      "text": "Delicate gold necklace and matching stud earrings."
+      "text": "Delicate gold necklace and matching stud earrings.",
     },
     {
       "image": "assets/p2.jpg",
       "price": "\$12.53",
-      "text": "Delicate gold necklace and matching stud earrings."
+      "text": "Delicate gold necklace and matching stud earrings.",
     },
     {
       "image": "assets/p3.jpg",
       "price": "\$33.63",
-      "text": "Delicate gold necklace and matching stud earrings."
+      "text": "Delicate gold necklace and matching stud earrings.",
     },
     {
       "image": "assets/p4.jpg",
       "price": "\$13.23",
-      "text": "Delicate gold necklace and matching stud earrings."
+      "text": "Delicate gold necklace and matching stud earrings.",
     },
     {
       "image": "assets/p5.jpg",
       "price": "\$18.90",
-      "text": "Delicate gold necklace and matching stud earrings."
+      "text": "Delicate gold necklace and matching stud earrings.",
     },
     {
       "image": "assets/p6.jpg",
       "price": "\$20.11",
-      "text": "Delicate gold necklace and matching stud earrings."
+      "text": "Delicate gold necklace and matching stud earrings.",
     },
   ];
 
@@ -80,7 +79,10 @@ class ExplorePage extends StatelessWidget {
               // SEARCH FIELD
               //------------------------------------
               Container(
-                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 12,
+                  vertical: 4,
+                ),
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(12),
                   border: Border.all(color: Colors.black12),
@@ -129,7 +131,8 @@ class ExplorePage extends StatelessWidget {
                           //------------------------------------
                           ClipRRect(
                             borderRadius: const BorderRadius.vertical(
-                                top: Radius.circular(14)),
+                              top: Radius.circular(14),
+                            ),
                             child: Image.asset(
                               product["image"]!,
                               height: 130,

@@ -3,12 +3,9 @@
 #
 
 list(APPEND FLUTTER_PLUGIN_LIST
-<<<<<<< HEAD
   cloud_firestore
   firebase_auth
   firebase_core
-=======
->>>>>>> 5b35bb3 (Initial commit)
 )
 
 list(APPEND FLUTTER_FFI_PLUGIN_LIST

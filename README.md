@@ -1,8 +1,8 @@
-<<<<<<< HEAD
+ HEAD
 # Jewelio
-=======
+
 # jewelio
->>>>>>> 5b35bb3 (Initial commit)
+ 5b35bb3 (Initial commit)
 
 A new Flutter project.
 

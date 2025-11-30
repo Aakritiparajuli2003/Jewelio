@@ -1,52 +1,36 @@
 name: jewelio
-description: "A new Flutter project."
+description: A new Flutter project.
 publish_to: 'none'
 
 version: 1.0.0+1
 
 environment:
-  sdk: ^3.9.2
+  sdk: ">=3.9.0 <4.0.0"
 
 dependencies:
   flutter:
     sdk: flutter
-<<<<<<< HEAD
-  cupertino_icons: ^1.0.8
-  firebase_core: ^4.2.1  
-  firebase_auth: ^6.1.2
-  cloud_firestore: ^6.1.0  
-=======
 
   cupertino_icons: ^1.0.8
   google_fonts: ^6.2.1
-
->>>>>>> 5b35bb3 (Initial commit)
+  firebase_core: ^4.2.1
+  firebase_auth: ^6.1.2
+  cloud_firestore: ^6.1.0    
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
-<<<<<<< HEAD
   flutter_lints: ^6.0.0
 
 flutter:
   uses-material-design: true
-  assets:
-    - assets/3.jpg
-    - assets/Logo.png
-    - assets/banner.jpg
-    - assets/new.jpg
-    - assets/best.jpg
-    - assets/gift.jpg
-    - assets/signup.jpg
-
-=======
-
-  flutter_lints: ^5.0.0
-
-flutter:
-  uses-material-design: true
 
   assets:
-    - assets/
-    - assets/images/
->>>>>>> 5b35bb3 (Initial commit)
+    -  assets/signup.jpg
+    -  assets/3.jpg
+    -  assets/p1.jpg
+    -  assets/p2.jpg
+    -  assets/p3.jpg
+    -  assets/p4.jpg
+    -  assets/p5.jpg
+    -  assets/p6.jpg

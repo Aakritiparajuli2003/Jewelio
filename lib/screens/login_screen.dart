@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -126,7 +125,6 @@ class _LoginScreenState extends State<LoginScreen> {
                     ),
                     const SizedBox(height: 20),
 
-                   
                     TextField(
                       controller: emailController,
                       decoration: InputDecoration(
@@ -141,7 +139,6 @@ class _LoginScreenState extends State<LoginScreen> {
 
                     const SizedBox(height: 15),
 
-                 
                     TextField(
                       controller: passwordController,
                       obscureText: true,
