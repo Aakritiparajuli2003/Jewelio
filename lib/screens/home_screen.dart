@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'login_screen.dart'; 
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -10,24 +11,42 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   int currentIndex = 0;
 
+  // 🔴 LOGOUT FUNCTION
+  void _logout(BuildContext context) {
+    Navigator.pushReplacement(
+      context,
+      MaterialPageRoute(builder: (_) => const LoginScreen()),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
+
       appBar: AppBar(
         backgroundColor: Colors.white,
         elevation: 0,
         title: const Text(
           "Jewelio",
           style: TextStyle(
-              fontSize: 30, fontWeight: FontWeight.bold, letterSpacing: 1),
+            fontSize: 30,
+            fontWeight: FontWeight.bold,
+            letterSpacing: 1,
+          ),
         ),
         actions: [
           IconButton(
-              onPressed: () {}, icon: const Icon(Icons.favorite_border)),
+            onPressed: () {},
+            icon: const Icon(Icons.favorite_border),
+          ),
+
           Stack(
             children: [
-              IconButton(onPressed: () {}, icon: const Icon(Icons.shopping_cart)),
+              IconButton(
+                onPressed: () {},
+                icon: const Icon(Icons.shopping_cart),
+              ),
               Positioned(
                 right: 6,
                 top: 6,
@@ -40,8 +59,14 @@ class _HomePageState extends State<HomePage> {
                     style: TextStyle(color: Colors.white, fontSize: 10),
                   ),
                 ),
-              )
+              ),
             ],
+          ),
+
+          // 🔴 LOGOUT BUTTON
+          IconButton(
+            icon: const Icon(Icons.logout),
+            onPressed: () => _logout(context),
           ),
         ],
       ),
@@ -49,7 +74,7 @@ class _HomePageState extends State<HomePage> {
       body: SingleChildScrollView(
         child: Column(
           children: [
-          
+            // 🔍 Search Box
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
               child: TextField(
@@ -58,21 +83,22 @@ class _HomePageState extends State<HomePage> {
                   prefixIcon: const Icon(Icons.search),
                   contentPadding: const EdgeInsets.symmetric(vertical: 10),
                   border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(30)),
+                    borderRadius: BorderRadius.circular(30),
+                  ),
                 ),
               ),
             ),
 
             const SizedBox(height: 10),
 
-          
+            // 🔥 Banner
             Container(
               margin: const EdgeInsets.symmetric(horizontal: 20),
               height: 200,
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(15),
                 image: const DecorationImage(
-                  image: AssetImage("assets/banner.jpg"), // replace your image
+                  image: AssetImage("assets/banner.jpg"),
                   fit: BoxFit.cover,
                 ),
               ),
@@ -80,12 +106,15 @@ class _HomePageState extends State<HomePage> {
 
             const SizedBox(height: 20),
 
+            // ⭐ Jewelio Special
             const Text(
               "Jewelio Special",
               style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
             ),
-            const Text("Our top picks, just for you!",
-                style: TextStyle(fontSize: 14)),
+            const Text(
+              "Our top picks, just for you!",
+              style: TextStyle(fontSize: 14),
+            ),
 
             const SizedBox(height: 10),
 
@@ -99,14 +128,16 @@ class _HomePageState extends State<HomePage> {
 
             const SizedBox(height: 25),
 
-            const Text("Gifting",
-                style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold)),
+            // 🎁 Gifting
+            const Text(
+              "Gifting",
+              style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
+            ),
             const Text("Find the perfect gift",
                 style: TextStyle(fontSize: 14)),
 
             const SizedBox(height: 15),
 
-           
             Container(
               height: 170,
               margin: const EdgeInsets.symmetric(horizontal: 20),
@@ -118,6 +149,7 @@ class _HomePageState extends State<HomePage> {
                 ),
               ),
             ),
+
             const SizedBox(height: 20),
           ],
         ),
@@ -141,28 +173,36 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
- 
+  // 🔶 Product Card Widget
   Widget productCard(String title, String imagePath) {
     return Container(
       width: 160,
       height: 200,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(15),
-        image: DecorationImage(image: AssetImage(imagePath), fit: BoxFit.cover),
+        image: DecorationImage(
+            image: AssetImage(imagePath), fit: BoxFit.cover),
       ),
       alignment: Alignment.bottomCenter,
       child: Container(
         width: double.infinity,
         padding: const EdgeInsets.all(8),
-        decoration: BoxDecoration(
-            color: const Color.fromRGBO(255, 255, 255, 0.6),
-            borderRadius: const BorderRadius.only(
-                bottomLeft: Radius.circular(15),
-                bottomRight: Radius.circular(15))),
+        decoration: const BoxDecoration(
+          color: Color.fromRGBO(255, 255, 255, 0.6),
+          borderRadius: BorderRadius.only(
+            bottomLeft: Radius.circular(15),
+            bottomRight: Radius.circular(15),
+          ),
+        ),
         child: Center(
-          child: Text(title,
-              style: const TextStyle(
-                  fontSize: 16, fontWeight: FontWeight.bold, color: Colors.red)),
+          child: Text(
+            title,
+            style: const TextStyle(
+              fontSize: 16,
+              fontWeight: FontWeight.bold,
+              color: Colors.red,
+            ),
+          ),
         ),
       ),
     );
