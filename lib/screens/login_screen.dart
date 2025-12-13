@@ -190,6 +190,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
             const SizedBox(height: 35),
 
+            // ----------- LOGIN BUTTON -----------
             isLoading
                 ? const CircularProgressIndicator()
                 : Padding(
