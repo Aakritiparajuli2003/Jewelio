@@ -1,4 +1,8 @@
 import 'package:flutter/material.dart';
+import 'explore_page.dart';
+import 'store_screen.dart';
+import 'cart_screen.dart';
+import 'profile_screen.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -9,6 +13,21 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   int currentIndex = 0;
+
+  // List of pages for BottomNavigationBar
+  late final List<Widget> pages;
+
+  @override
+  void initState() {
+    super.initState();
+    pages = [
+      const HomePage(),      // Home
+      const ExplorePage(),   // Search -> Explore
+      const StoreScreen(),
+      const CartScreen(),
+      const ProfileScreen(),
+    ];
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -78,7 +97,7 @@ class _HomePageState extends State<HomePage> {
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(15),
                 image: const DecorationImage(
-                  image: AssetImage("assets/banner.jpg"), // replace your image
+                  image: AssetImage("assets/banner.jpg"),
                   fit: BoxFit.cover,
                 ),
               ),
@@ -131,21 +150,32 @@ class _HomePageState extends State<HomePage> {
         ),
       ),
 
+      // -----------------------
+      // BottomNavigationBar
+      // -----------------------
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: currentIndex,
         selectedItemColor: Colors.redAccent,
         unselectedItemColor: Colors.grey,
+        type: BottomNavigationBarType.fixed,
         onTap: (index) {
-          setState(() => currentIndex = index);
+          setState(() {
+            currentIndex = index;
+          });
+
+          // Avoid pushing the same HomePage again
+          if (index != 0) {
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (_) => pages[index]),
+            );
+          }
         },
         items: const [
           BottomNavigationBarItem(icon: Icon(Icons.home), label: "Home"),
-          BottomNavigationBarItem(icon: Icon(Icons.search), label: "Search"),
+          BottomNavigationBarItem(icon: Icon(Icons.search), label: "Explore"),
           BottomNavigationBarItem(icon: Icon(Icons.store), label: "Store"),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.shopping_cart),
-            label: "Cart",
-          ),
+          BottomNavigationBarItem(icon: Icon(Icons.shopping_cart), label: "Cart"),
           BottomNavigationBarItem(icon: Icon(Icons.person), label: "Profile"),
         ],
       ),
