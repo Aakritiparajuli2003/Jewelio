@@ -78,7 +78,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 height: 350,
                 width: double.infinity,
                 child: Image.asset(
-                  "assets/3.jpg",
+                  "assets/signup.jpg",
                   fit: BoxFit.cover,
                 ),
               ),
@@ -86,7 +86,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
             const SizedBox(height: 20),
 
-            // ----------- TITLE SECTION -----------
+           
             const Text(
               "Welcome Back!",
               style: TextStyle(
@@ -106,7 +106,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
             const SizedBox(height: 35),
 
-            // ----------- EMAIL FIELD -----------
+        
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 30),
               child: Column(
@@ -127,7 +127,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   ),
                   const SizedBox(height: 5),
 
-                  // Underline textfield
+                  
                   TextField(
                     controller: emailController,
                     decoration: const InputDecoration(
@@ -140,7 +140,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
             const SizedBox(height: 25),
 
-            // ----------- PASSWORD FIELD -----------
+            
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 30),
               child: Column(
@@ -190,7 +190,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
             const SizedBox(height: 35),
 
-            // ----------- LOGIN BUTTON -----------
+    
             isLoading
                 ? const CircularProgressIndicator()
                 : Padding(
@@ -217,7 +217,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
             const SizedBox(height: 30),
 
-            // ----------- OR DIVIDER -----------
+           
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: const [
@@ -241,7 +241,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
             const SizedBox(height: 30),
 
-            // ----------- SIGN UP BUTTON -----------
+           
             GestureDetector(
               onTap: () {
                 Navigator.push(

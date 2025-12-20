@@ -11,7 +11,7 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   int currentIndex = 0;
 
-  // 🔴 LOGOUT FUNCTION
+
   void _logout(BuildContext context) {
     Navigator.pushReplacement(
       context,
@@ -101,7 +101,7 @@ class _HomePageState extends State<HomePage> {
 
             const SizedBox(height: 12),
 
-            // 📸 Banner Image
+           
             ClipRRect(
               borderRadius: BorderRadius.circular(30),
               child: Container(
@@ -118,7 +118,7 @@ class _HomePageState extends State<HomePage> {
 
             const SizedBox(height: 30),
 
-            // ⭐ Jewelio Special
+        
             const Text(
               "Jewelio Special",
               style: TextStyle(
@@ -146,7 +146,7 @@ class _HomePageState extends State<HomePage> {
 
             const SizedBox(height: 35),
 
-            // 🎁 Gifting Section
+          
             const Text(
               "Gifting",
               style: TextStyle(
@@ -183,7 +183,7 @@ class _HomePageState extends State<HomePage> {
         ),
       ),
 
-      // 🔻 Bottom Navigation
+   
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: currentIndex,
         selectedItemColor: Colors.redAccent,
@@ -201,7 +201,7 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  // 🔶 Product Card Widget
+  
   Widget productCard(String title, String img) {
     return ClipRRect(
       borderRadius: BorderRadius.circular(20),

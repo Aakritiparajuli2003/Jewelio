@@ -9,7 +9,7 @@ class ProfilePage extends StatelessWidget {
       backgroundColor: Colors.white,
       body: Column(
         children: [
-          // 🔝 Header Section
+         
           Stack(
             children: [
               Container(
@@ -23,7 +23,7 @@ class ProfilePage extends StatelessWidget {
                 ),
               ),
 
-              // App bar icons
+             
               Positioned(
                 top: 40,
                 left: 16,
@@ -35,7 +35,7 @@ class ProfilePage extends StatelessWidget {
                 child: Icon(Icons.favorite_border, color: Colors.white),
               ),
 
-              // Profile picture & name
+              
               Positioned(
                 bottom: 0,
                 left: 0,
