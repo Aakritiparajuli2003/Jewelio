@@ -1,5 +1,11 @@
 import 'package:flutter/material.dart';
 import 'login_screen.dart';
+import 'explore_page.dart';
+import 'checkout_screen.dart';
+import 'profile_page.dart';
+
+
+
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);

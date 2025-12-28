@@ -53,7 +53,7 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
             ClipRRect(
               borderRadius: BorderRadius.circular(24),
               child: Image.asset(
-                "assets/images/pearl_bangles.png", // add image here
+                "assets/images/ring.jpg", // add image here
                 height: 280,
                 width: double.infinity,
                 fit: BoxFit.cover,
@@ -62,7 +62,7 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
 
             const SizedBox(height: 10),
 
-            /// Image indicators
+          
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: List.generate(
@@ -81,12 +81,12 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
 
             const SizedBox(height: 20),
 
-            /// Product title + rating
+            
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: const [
                 Text(
-                  "Pearl Bangles",
+                  "Keystone Ring",
                   style: TextStyle(
                     fontSize: 24,
                     fontWeight: FontWeight.bold,
@@ -114,7 +114,7 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
                 children: [
                   TextSpan(
                     text:
-                        "Plated pearl bangles are elegant wrist accessories featuring pearls set in metal, combining classic charm with modern style ",
+                        "This gold-plated ring features a sleek band with a rectangular gemstone at the center, blending modern design with timeless elegance.",
                   ),
                   TextSpan(
                     text: "Read More",
@@ -129,14 +129,14 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
 
             const SizedBox(height: 20),
 
-            /// Price
+            
             const Text(
               "Price",
               style: TextStyle(fontSize: 16),
             ),
             const SizedBox(height: 6),
             const Text(
-              "\$38.98",
+            "RS 2,499",
               style: TextStyle(
                 fontSize: 26,
                 fontWeight: FontWeight.bold,
@@ -145,7 +145,7 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
 
             const SizedBox(height: 20),
 
-            /// Color selection
+            
             Row(
               children: List.generate(
                 colors.length,
@@ -169,7 +169,7 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
 
             const SizedBox(height: 30),
 
-            /// Quantity + Add to cart
+           
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
@@ -203,7 +203,7 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
                   ),
                 ),
 
-                /// Add to cart button
+                
                 ElevatedButton(
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.red,
@@ -214,7 +214,7 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
                     ),
                   ),
                   onPressed: () {
-                    // add to cart logic later
+                   
                   },
                   child: const Text(
                     "Add to cart",

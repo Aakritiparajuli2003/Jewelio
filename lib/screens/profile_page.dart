@@ -48,7 +48,7 @@ class ProfilePage extends StatelessWidget {
                     ),
                     SizedBox(height: 10),
                     Text(
-                      "Hrida Nakshatra",
+                      "Scobby DOO",
                       style: TextStyle(
                         fontSize: 20,
                         color: Colors.white,
