@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'home_screen.dart';
+import 'product_detail.dart'; // import ProductDetailsPage
 
 class ExplorePage extends StatelessWidget {
   ExplorePage({super.key});
@@ -43,7 +44,6 @@ class ExplorePage extends StatelessWidget {
     return Scaffold(
       backgroundColor: Colors.white,
 
-      // 🔝 AppBar (NO back button)
       appBar: AppBar(
         backgroundColor: Colors.white,
         elevation: 0,
@@ -104,48 +104,58 @@ class ExplorePage extends StatelessWidget {
                 itemBuilder: (context, index) {
                   final product = products[index];
 
-                  return Container(
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(14),
-                      border: Border.all(color: Colors.black12),
-                    ),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        ClipRRect(
-                          borderRadius: const BorderRadius.vertical(
-                            top: Radius.circular(14),
-                          ),
-                          child: Image.asset(
-                            product["image"]!,
-                            height: 130,
-                            width: double.infinity,
-                            fit: BoxFit.cover,
-                          ),
+                  return GestureDetector(
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (_) => const ProductDetailsPage(),
                         ),
-                        Padding(
-                          padding: const EdgeInsets.all(10),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                product["price"]!,
-                                style: GoogleFonts.poppins(
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.w600,
+                      );
+                    },
+                    child: Container(
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(14),
+                        border: Border.all(color: Colors.black12),
+                      ),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          ClipRRect(
+                            borderRadius: const BorderRadius.vertical(
+                              top: Radius.circular(14),
+                            ),
+                            child: Image.asset(
+                              product["image"]!,
+                              height: 130,
+                              width: double.infinity,
+                              fit: BoxFit.cover,
+                            ),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.all(10),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  product["price"]!,
+                                  style: GoogleFonts.poppins(
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.w600,
+                                  ),
                                 ),
-                              ),
-                              const SizedBox(height: 6),
-                              Text(
-                                product["text"]!,
-                                maxLines: 2,
-                                overflow: TextOverflow.ellipsis,
-                                style: GoogleFonts.poppins(fontSize: 12),
-                              ),
-                            ],
+                                const SizedBox(height: 6),
+                                Text(
+                                  product["text"]!,
+                                  maxLines: 2,
+                                  overflow: TextOverflow.ellipsis,
+                                  style: GoogleFonts.poppins(fontSize: 12),
+                                ),
+                              ],
+                            ),
                           ),
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
                   );
                 },
@@ -155,9 +165,8 @@ class ExplorePage extends StatelessWidget {
         ),
       ),
 
-      // ⬇️ Bottom Navigation (Search selected)
       bottomNavigationBar: BottomNavigationBar(
-        currentIndex: 1, // Search active
+        currentIndex: 1,
         selectedItemColor: Colors.redAccent,
         unselectedItemColor: Colors.grey,
         type: BottomNavigationBarType.fixed,
@@ -165,7 +174,7 @@ class ExplorePage extends StatelessWidget {
           if (index == 0) {
             Navigator.pushReplacement(
               context,
-              MaterialPageRoute(builder: (_) => const HomePage()),
+              MaterialPageRoute(builder: (_) => const HomeScreen()),
             );
           }
         },

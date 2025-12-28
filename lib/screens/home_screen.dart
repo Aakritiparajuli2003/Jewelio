@@ -2,21 +2,18 @@ import 'package:flutter/material.dart';
 import 'login_screen.dart';
 import 'explore_page.dart';
 import 'checkout_screen.dart';
+import 'cart_screen.dart';
 import 'profile_page.dart';
 
-
-
-
-class HomePage extends StatefulWidget {
-  const HomePage({Key? key}) : super(key: key);
+class HomeScreen extends StatefulWidget {
+  const HomeScreen({Key? key}) : super(key: key);
 
   @override
-  State<HomePage> createState() => _HomePageState();
+  State<HomeScreen> createState() => _HomeScreenState();
 }
 
-class _HomePageState extends State<HomePage> {
+class _HomeScreenState extends State<HomeScreen> {
   int currentIndex = 0;
-
 
   void _logout(BuildContext context) {
     Navigator.pushReplacement(
@@ -25,10 +22,31 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
+  void _goToExplorePage() {
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (_) => ExplorePage()),
+    );
+  }
+
+  void _goToProfilePage() {
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (_) => const ProfilePage()),
+    );
+  }
+
+  void _goToCartPage() {
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (_) => const CartScreen()),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xffFAF7EF), // Cream background
+      backgroundColor: const Color(0xffFAF7EF),
 
       appBar: AppBar(
         backgroundColor: const Color(0xffFAF7EF),
@@ -49,7 +67,7 @@ class _HomePageState extends State<HomePage> {
           Stack(
             children: [
               IconButton(
-                onPressed: () {},
+                onPressed: _goToCartPage, 
                 icon: const Icon(Icons.shopping_cart_outlined, color: Colors.black87),
               ),
               Positioned(
@@ -70,6 +88,10 @@ class _HomePageState extends State<HomePage> {
             ],
           ),
           IconButton(
+            icon: const Icon(Icons.person_outline, color: Colors.black87),
+            onPressed: _goToProfilePage,
+          ),
+          IconButton(
             icon: const Icon(Icons.logout, color: Colors.black87),
             onPressed: () => _logout(context),
           ),
@@ -82,24 +104,32 @@ class _HomePageState extends State<HomePage> {
             // 🔍 Modern Search Bar
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-              child: Container(
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(25),
-                  boxShadow: [
-                    BoxShadow(
-                      color: const Color.fromARGB(255, 2, 0, 3), 
-                      blurRadius: 6,
-                      offset: const Offset(0, 3),
-                    )
-                  ],
-                ),
-                child: TextField(
-                  decoration: InputDecoration(
-                    hintText: "Search Products...",
-                    prefixIcon: const Icon(Icons.search),
-                    border: InputBorder.none,
-                    contentPadding: const EdgeInsets.symmetric(vertical: 12),
+              child: GestureDetector(
+                onTap: _goToExplorePage,
+                child: Container(
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(25),
+                    boxShadow: [
+                      BoxShadow(
+                        color: const Color.fromARGB(255, 2, 0, 3),
+                        blurRadius: 6,
+                        offset: const Offset(0, 3),
+                      )
+                    ],
+                  ),
+                  child: const Padding(
+                    padding: EdgeInsets.symmetric(vertical: 12, horizontal: 12),
+                    child: Row(
+                      children: [
+                        Icon(Icons.search),
+                        SizedBox(width: 8),
+                        Text(
+                          "Search Products...",
+                          style: TextStyle(color: Colors.grey),
+                        ),
+                      ],
+                    ),
                   ),
                 ),
               ),
@@ -107,7 +137,6 @@ class _HomePageState extends State<HomePage> {
 
             const SizedBox(height: 12),
 
-           
             ClipRRect(
               borderRadius: BorderRadius.circular(30),
               child: Container(
@@ -124,7 +153,6 @@ class _HomePageState extends State<HomePage> {
 
             const SizedBox(height: 30),
 
-        
             const Text(
               "Jewelio Special",
               style: TextStyle(
@@ -152,7 +180,6 @@ class _HomePageState extends State<HomePage> {
 
             const SizedBox(height: 35),
 
-          
             const Text(
               "Gifting",
               style: TextStyle(
@@ -189,13 +216,19 @@ class _HomePageState extends State<HomePage> {
         ),
       ),
 
-   
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: currentIndex,
         selectedItemColor: Colors.redAccent,
         unselectedItemColor: Colors.grey,
-        onTap: (index) => setState(() => currentIndex = index),
         type: BottomNavigationBarType.fixed,
+        onTap: (index) {
+          setState(() {
+            currentIndex = index;
+          });
+          if (index == 1) _goToExplorePage(); // Search tab
+          if (index == 3) _goToCartPage();    // Cart tab
+          if (index == 4) _goToProfilePage(); // Profile tab
+        },
         items: const [
           BottomNavigationBarItem(icon: Icon(Icons.home_outlined), label: "Home"),
           BottomNavigationBarItem(icon: Icon(Icons.search), label: "Search"),
@@ -207,7 +240,6 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  
   Widget productCard(String title, String img) {
     return ClipRRect(
       borderRadius: BorderRadius.circular(20),
@@ -225,11 +257,9 @@ class _HomePageState extends State<HomePage> {
           child: Container(
             width: double.infinity,
             padding: const EdgeInsets.all(10),
-            decoration: BoxDecoration(
-              color: const Color(0xffF8F5EB), 
-            ),
+            color: const Color(0xffF8F5EB),
             child: Text(
-              title, // ← Display product title
+              title,
               textAlign: TextAlign.center,
               style: const TextStyle(
                 fontWeight: FontWeight.bold,

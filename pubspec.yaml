@@ -34,11 +34,13 @@ flutter:
     -  assets/p4.jpg
     -  assets/p5.jpg
     -  assets/p6.jpg
-    - assets/banner.jpg
-    - assets/new.jpg
-    - assets/best.jpg
-    - assets/gift.jpg
-    - assets/profile.jpg
-    - assets/pearl_bangles.png
-    
+    -  assets/banner.jpg
+    -  assets/new.jpg
+    -  assets/best.jpg
+    -  assets/gift.jpg
+    -  assets/profile.jpg
+    -  assets/pearl_bangles.png
+    -  assets/onboarding.jpg
+    -  assets/google1.png
+    -  assets/profile_bg1.jpg
 
