@@ -25,3 +25,7 @@ flutter:
   assets:
     - assets/2.png
     - assets/Logo.png
+    - assets/fb.png
+    - assets/google.png
+    - assets/insta.png
+     
