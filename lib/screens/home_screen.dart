@@ -1,47 +1,100 @@
-import 'package:flutter/material.dart';
 
-class HomePage extends StatefulWidget {
-  const HomePage({Key? key}) : super(key: key);
+import 'package:flutter/material.dart';
+import 'login_screen.dart';
+import 'explore_page.dart';
+import 'checkout_screen.dart';
+import 'cart_screen.dart';
+import 'profile_page.dart';
+
+class HomeScreen extends StatefulWidget {
+  const HomeScreen({Key? key}) : super(key: key);
 
   @override
-  State<HomePage> createState() => _HomePageState();
+  State<HomeScreen> createState() => _HomeScreenState();
 }
 
-class _HomePageState extends State<HomePage> {
+class _HomeScreenState extends State<HomeScreen> {
   int currentIndex = 0;
+
+  void _logout(BuildContext context) {
+    Navigator.pushReplacement(
+      context,
+      MaterialPageRoute(builder: (_) => const LoginScreen()),
+    );
+  }
+
+  void _goToExplorePage() {
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (_) => ExplorePage()),
+    );
+  }
+
+  void _goToProfilePage() {
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (_) => const ProfilePage()),
+    );
+  }
+
+  void _goToCartPage() {
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (_) => const CartScreen()),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: const Color(0xffFAF7EF),
+
       appBar: AppBar(
-        backgroundColor: Colors.white,
+        backgroundColor: const Color(0xffFAF7EF),
         elevation: 0,
         title: const Text(
           "Jewelio",
           style: TextStyle(
-              fontSize: 30, fontWeight: FontWeight.bold, letterSpacing: 1),
+            fontSize: 32,
+            fontWeight: FontWeight.bold,
+            color: Colors.black87,
+          ),
         ),
         actions: [
           IconButton(
-              onPressed: () {}, icon: const Icon(Icons.favorite_border)),
+            onPressed: () {},
+            icon: const Icon(Icons.favorite_border, color: Colors.black87),
+          ),
           Stack(
             children: [
-              IconButton(onPressed: () {}, icon: const Icon(Icons.shopping_cart)),
+              IconButton(
+                onPressed: _goToCartPage, 
+                icon: const Icon(Icons.shopping_cart_outlined, color: Colors.black87),
+              ),
               Positioned(
                 right: 6,
                 top: 6,
                 child: Container(
                   padding: const EdgeInsets.all(3),
                   decoration: const BoxDecoration(
-                      color: Colors.red, shape: BoxShape.circle),
+                    color: Colors.red,
+                    shape: BoxShape.circle,
+                  ),
                   child: const Text(
                     "4",
                     style: TextStyle(color: Colors.white, fontSize: 10),
                   ),
                 ),
-              )
+              ),
             ],
+          ),
+          IconButton(
+            icon: const Icon(Icons.person_outline, color: Colors.black87),
+            onPressed: _goToProfilePage,
+          ),
+          IconButton(
+            icon: const Icon(Icons.logout, color: Colors.black87),
+            onPressed: () => _logout(context),
           ),
         ],
       ),
@@ -49,45 +102,74 @@ class _HomePageState extends State<HomePage> {
       body: SingleChildScrollView(
         child: Column(
           children: [
-          
+            // 🔍 Modern Search Bar
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
-              child: TextField(
-                decoration: InputDecoration(
-                  hintText: "Search Product",
-                  prefixIcon: const Icon(Icons.search),
-                  contentPadding: const EdgeInsets.symmetric(vertical: 10),
-                  border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(30)),
+              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+              child: GestureDetector(
+                onTap: _goToExplorePage,
+                child: Container(
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(25),
+                    boxShadow: [
+                      BoxShadow(
+                        color: const Color.fromARGB(255, 2, 0, 3),
+                        blurRadius: 6,
+                        offset: const Offset(0, 3),
+                      )
+                    ],
+                  ),
+                  child: const Padding(
+                    padding: EdgeInsets.symmetric(vertical: 12, horizontal: 12),
+                    child: Row(
+                      children: [
+                        Icon(Icons.search),
+                        SizedBox(width: 8),
+                        Text(
+                          "Search Products...",
+                          style: TextStyle(color: Colors.grey),
+                        ),
+                      ],
+                    ),
+                  ),
                 ),
               ),
             ),
 
-            const SizedBox(height: 10),
+            const SizedBox(height: 12),
 
-          
-            Container(
-              margin: const EdgeInsets.symmetric(horizontal: 20),
-              height: 200,
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(15),
-                image: const DecorationImage(
-                  image: AssetImage("assets/banner.jpg"), // replace your image
-                  fit: BoxFit.cover,
+            ClipRRect(
+              borderRadius: BorderRadius.circular(30),
+              child: Container(
+                margin: const EdgeInsets.symmetric(horizontal: 20),
+                height: 240,
+                decoration: const BoxDecoration(
+                  image: DecorationImage(
+                    image: AssetImage("assets/banner.jpg"),
+                    fit: BoxFit.cover,
+                  ),
                 ),
               ),
             ),
 
-            const SizedBox(height: 20),
+            const SizedBox(height: 30),
 
             const Text(
               "Jewelio Special",
-              style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
+              style: TextStyle(
+                fontSize: 26,
+                fontWeight: FontWeight.bold,
+                letterSpacing: 0.5,
+                color: Colors.black87,
+              ),
             ),
-            const Text("Our top picks, just for you!",
-                style: TextStyle(fontSize: 14)),
+            const SizedBox(height: 5),
+            const Text(
+              "Our top picks, just for you!",
+              style: TextStyle(fontSize: 15, color: Colors.grey),
+            ),
 
-            const SizedBox(height: 10),
+            const SizedBox(height: 20),
 
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -97,28 +179,40 @@ class _HomePageState extends State<HomePage> {
               ],
             ),
 
-            const SizedBox(height: 25),
+            const SizedBox(height: 35),
 
-            const Text("Gifting",
-                style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold)),
-            const Text("Find the perfect gift",
-                style: TextStyle(fontSize: 14)),
+            const Text(
+              "Gifting",
+              style: TextStyle(
+                fontSize: 26,
+                fontWeight: FontWeight.bold,
+                letterSpacing: 0.5,
+                color: Colors.black87,
+              ),
+            ),
+            const SizedBox(height: 5),
+            const Text(
+              "Find the perfect gift",
+              style: TextStyle(fontSize: 15, color: Colors.grey),
+            ),
 
-            const SizedBox(height: 15),
+            const SizedBox(height: 20),
 
-           
-            Container(
-              height: 170,
-              margin: const EdgeInsets.symmetric(horizontal: 20),
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(15),
-                image: const DecorationImage(
-                  image: AssetImage("assets/gift.jpg"),
-                  fit: BoxFit.cover,
+            ClipRRect(
+              borderRadius: BorderRadius.circular(25),
+              child: Container(
+                height: 200,
+                margin: const EdgeInsets.symmetric(horizontal: 20),
+                decoration: const BoxDecoration(
+                  image: DecorationImage(
+                    image: AssetImage("assets/gift.jpg"),
+                    fit: BoxFit.cover,
+                  ),
                 ),
               ),
             ),
-            const SizedBox(height: 20),
+
+            const SizedBox(height: 40),
           ],
         ),
       ),
@@ -127,42 +221,54 @@ class _HomePageState extends State<HomePage> {
         currentIndex: currentIndex,
         selectedItemColor: Colors.redAccent,
         unselectedItemColor: Colors.grey,
+        type: BottomNavigationBarType.fixed,
         onTap: (index) {
-          setState(() => currentIndex = index);
+          setState(() {
+            currentIndex = index;
+          });
+          if (index == 1) _goToExplorePage(); // Search tab
+          if (index == 3) _goToCartPage();    // Cart tab
+          if (index == 4) _goToProfilePage(); // Profile tab
         },
         items: const [
-          BottomNavigationBarItem(icon: Icon(Icons.home), label: "Home"),
+          BottomNavigationBarItem(icon: Icon(Icons.home_outlined), label: "Home"),
           BottomNavigationBarItem(icon: Icon(Icons.search), label: "Search"),
-          BottomNavigationBarItem(icon: Icon(Icons.store), label: "Store"),
-          BottomNavigationBarItem(icon: Icon(Icons.shopping_cart), label: "Cart"),
-          BottomNavigationBarItem(icon: Icon(Icons.person), label: "Profile"),
+          BottomNavigationBarItem(icon: Icon(Icons.storefront), label: "Store"),
+          BottomNavigationBarItem(icon: Icon(Icons.shopping_cart_outlined), label: "Cart"),
+          BottomNavigationBarItem(icon: Icon(Icons.person_outline), label: "Profile"),
         ],
       ),
     );
   }
 
- 
-  Widget productCard(String title, String imagePath) {
-    return Container(
-      width: 160,
-      height: 200,
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(15),
-        image: DecorationImage(image: AssetImage(imagePath), fit: BoxFit.cover),
-      ),
-      alignment: Alignment.bottomCenter,
+  Widget productCard(String title, String img) {
+    return ClipRRect(
+      borderRadius: BorderRadius.circular(20),
       child: Container(
-        width: double.infinity,
-        padding: const EdgeInsets.all(8),
+        width: 160,
+        height: 210,
         decoration: BoxDecoration(
-            color: const Color.fromRGBO(255, 255, 255, 0.6),
-            borderRadius: const BorderRadius.only(
-                bottomLeft: Radius.circular(15),
-                bottomRight: Radius.circular(15))),
-        child: Center(
-          child: Text(title,
+          image: DecorationImage(
+            image: AssetImage(img),
+            fit: BoxFit.cover,
+          ),
+        ),
+        child: Align(
+          alignment: Alignment.bottomCenter,
+          child: Container(
+            width: double.infinity,
+            padding: const EdgeInsets.all(10),
+            color: const Color(0xffF8F5EB),
+            child: Text(
+              title,
+              textAlign: TextAlign.center,
               style: const TextStyle(
-                  fontSize: 16, fontWeight: FontWeight.bold, color: Colors.red)),
+                fontWeight: FontWeight.bold,
+                fontSize: 17,
+                color: Colors.redAccent,
+              ),
+            ),
+          ),
         ),
       ),
     );
