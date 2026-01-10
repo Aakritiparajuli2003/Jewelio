@@ -26,6 +26,7 @@ flutter:
   uses-material-design: true
 
   assets:
+
     -  assets/signup.jpg
     -  assets/3.jpg
     -  assets/p1.jpg
@@ -43,4 +44,3 @@ flutter:
     -  assets/onboarding.jpg
     -  assets/google1.png
     -  assets/profile_bg1.jpg
-

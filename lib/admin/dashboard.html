@@ -1,0 +1,539 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Jewelio Admin Dashboard</title>
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+
+<style>
+:root{
+    --gold:#C5A572;
+    --black:#222;
+    --white:#fff;
+    --light:#f7f7f7;
+}
+
+/* RESET */
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:"Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+}
+
+body{
+    background:var(--light);
+}
+
+/* HEADER */
+header{
+    width:100%;
+    background:var(--white);
+    padding:1.2rem 2rem;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    border-bottom:1px solid rgba(0,0,0,.1);
+    position:fixed;
+    top:0;
+    z-index:100;
+}
+
+.logo{
+    font-size:2rem;
+    font-weight:600;
+    text-decoration:none;
+    color:var(--black);
+}
+.logo span{color:var(--gold);}
+
+.admin-nav{
+    display:flex;
+    gap:2rem;
+}
+.admin-nav a{
+    text-decoration:none;
+    color:#555;
+}
+.admin-nav a.active,
+.admin-nav a:hover{
+    color:var(--gold);
+    border-bottom:2px solid var(--gold);
+}
+
+.icons a{
+    margin-left:18px;
+    color:#555;
+    font-size:1.3rem;
+}
+
+/* HERO */
+.home{
+    margin-top:6rem;
+    height:70vh;
+    background:url('assets/bg-admin.jpg') no-repeat center/cover;
+    position:relative;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+}
+.overlay{
+    position:absolute;
+    inset:0;
+    background:rgba(0,0,0,.4);
+}
+.home .content{
+    position:relative;
+    background:rgba(255,255,255,.9);
+    padding:2.5rem 3rem;
+    border-radius:12px;
+    text-align:center;
+    max-width:600px;
+}
+.home h3{font-size:2.5rem;}
+.home span{color:var(--gold);}
+
+/* MAIN */
+.main{
+    padding:2rem 2.5rem;
+}
+
+/* DASHBOARD CARDS */
+.cards{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(230px,1fr));
+    gap:1.5rem;
+}
+.card{
+    background:var(--white);
+    padding:1.5rem;
+    border-radius:8px;
+    text-align:center;
+}
+.card p{
+    font-size:1.7rem;
+    font-weight:bold;
+    color:var(--gold);
+}
+
+/* TABLE */
+.table-box{
+    margin-top:2.5rem;
+    background:var(--white);
+    padding:1.5rem;
+    border-radius:8px;
+}
+table{
+    width:100%;
+    border-collapse:collapse;
+}
+th,td{
+    padding:.9rem;
+    border-bottom:1px solid #ddd;
+}
+th{background:#f6f1e6}
+</style>
+</head>
+
+<body>
+
+<header>
+    <a href="#" class="logo">JEWELIO</a>
+
+    <nav class="admin-nav">
+        <a href="#" class="active">Dashboard</a>
+        <a href="products.html">Products</a>
+        <a href="#">Orders</a>
+        <a href="customer.html">Customers</a>
+        <a href="#">Settings</a>
+    </nav>
+
+    <div class="icons">
+        <a class="fas fa-heart"></a>
+        <a class="fas fa-shopping-cart"></a>
+        <a class="fas fa-user"></a>
+    </div>
+</header>
+
+<section class="home">
+    <div class="overlay"></div>
+    <div class="content">
+        <h3>Welcome Admin</h3>
+        <span>Jewelio – Admin Panel</span>
+    </div>
+</section>
+
+<div class="main">
+
+    <h2>Dashboard Overview</h2>
+
+    <div class="cards">
+        <div class="card"><h3>Total Orders</h3><p>142</p></div>
+        <div class="card"><h3>Total Customers</h3><p>98</p></div>
+        <div class="card"><h3>Total Revenue</h3><p>Rs 1,68,000</p></div>
+        <div class="card"><h3>Products Listed</h3><p>54</p></div>
+    </div>
+
+    <div class="table-box">
+        <h3>Recent Orders</h3>
+        <table>
+            <tr>
+                <th>Order ID</th>
+                <th>Customer</th>
+                <th>Total</th>
+                <th>Status</th>
+            </tr>
+            <tr>
+                <td>#00123</td>
+                <td>Riya</td>
+                <td>8500</td>
+                <td>Shipped</td>
+            </tr>
+            <tr>
+                <td>#00124</td>
+                <td>Arjun</td>
+                <td>4200</td>
+                <td>Pending</td>
+            </tr>
+            <tr>
+                <td>#00125</td>
+                <td>Neha</td>
+                <td>12600</td>
+                <td>Delivered</td>
+            </tr>
+        </table>
+    </div>
+
+</div>
+=======
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jewelio</title>
+
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+
+    <style>
+        :root{
+            --gold: #C5A572;
+            --black: #222;
+            --white: #fff;
+            --light: #f7f7f7;
+        }
+
+        *{
+            margin:0;
+            padding:0;
+            box-sizing:border-box;
+            font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body{
+            background: var(--light);
+        }
+
+        /* Header */
+        header{
+            width:100%;
+            background: var(--white);
+            padding:1.2rem 2rem;
+            display:flex;
+            justify-content: space-between;
+            align-items:center;
+            border-bottom:1px solid rgba(0,0,0,.1);
+            position:fixed;
+            top:0;
+            left:0;
+            z-index:100;
+        }
+
+        /* Logo */
+        header .logo{
+            font-size: 2rem;
+            font-weight:600;
+            letter-spacing:1px;
+            text-decoration:none;
+            color:var(--black);
+        }
+
+        header .logo span{
+            color:var(--gold);
+        }
+
+        /* Navigation Menu */
+        .admin-nav {
+            display: flex;
+            gap: 2rem;
+        }
+
+        .admin-nav a {
+            text-decoration: none;
+            font-size: 1rem;
+            color: #555;
+            padding-bottom: 3px;
+            transition: .3s;
+        }
+
+        .admin-nav a:hover,
+        .admin-nav a.active {
+            color: var(--gold);
+            border-bottom: 2px solid var(--gold);
+        }
+
+        /* Header Right Icons */
+        .icons a {
+            margin-left: 18px;
+            color: #555;
+            font-size: 1.3rem;
+            text-decoration: none;
+            transition: .3s;
+        }
+
+        .icons a:hover {
+            color: var(--gold);
+        }
+
+        /* HOME SECTION */
+        .home{
+            position: relative;
+            margin-top: 6rem;
+            background: url('assets/bg-admin.jpg') no-repeat center center/cover;
+            height: 90vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .home .overlay{
+            position: absolute;
+            top:0;
+            left:0;
+            width:100%;
+            height:100%;
+            background: rgba(0,0,0,0.4);
+            z-index:1;
+        }
+
+        .home .content {
+            position: relative;
+            z-index:2;
+            background: rgba(255,255,255,0.85);
+            padding:2.5rem 3rem;
+            border-radius: 12px;
+            max-width: 600px;
+            text-align: center;
+        }
+
+        .home .content h3{
+            font-size:2.5rem;
+            color:var(--black);
+            margin-bottom: 0.5rem;
+        }
+
+        .home .content span{
+            font-size:1.2rem;
+            color:var(--gold);
+            margin: 10px 0;
+            display:block;
+        }
+
+        .home .content p{
+            margin:1.2rem 0;
+            color:#444;
+            line-height:1.7;
+        }
+
+        .home .content .btn{
+            display:inline-block;
+            padding:12px 25px;
+            background:var(--gold);
+            color:white;
+            text-decoration:none;
+            border-radius:8px;
+            font-weight:bold;
+            transition:.3s;
+        }
+
+        .home .content .btn:hover{
+            background:#b08b46;
+        }
+
+        /* Main Section */
+        .main{
+            padding:2rem 2.5rem;
+        }
+
+        .main h2{
+            font-size:1.9rem;
+            margin-bottom:2rem;
+        }
+
+        /* Cards */
+        .cards{
+            display:grid;
+            grid-template-columns: repeat(auto-fit, minmax(230px,1fr));
+            gap:1.5rem;
+        }
+
+        .card{
+            background:var(--white);
+            padding:1.5rem;
+            border-radius:8px;
+            border:1px solid rgba(0,0,0,.07);
+            text-align:center;
+        }
+
+        .card h3{
+            font-size:1.3rem;
+            margin-bottom:.6rem;
+        }
+
+        .card p{
+            font-size:1.7rem;
+            font-weight:bold;
+            color:var(--gold);
+        }
+
+        /* Recent Orders Table */
+        .table-box{
+            margin-top:2.5rem;
+            background:var(--white);
+            padding:1.5rem;
+            border-radius:8px;
+            border:1px solid rgba(0,0,0,.07);
+        }
+
+        .table-box h3{
+            margin-bottom:1rem;
+            font-size:1.3rem;
+        }
+
+        table{
+            width:100%;
+            border-collapse: collapse;
+        }
+
+        th, td{
+            padding:0.9rem;
+            border-bottom:1px solid #ddd;
+            font-size:0.95rem;
+        }
+
+        th{
+            background:#f6f1e6;
+            text-align:left;
+        }
+
+        .status{
+            font-weight:bold;
+        }
+        .pending{ color:#d19a00; }
+        .shipped{ color:#005ac1; }
+        .delivered{ color:#1c9c54; }
+    </style>
+</head>
+<body>
+
+    <!-- Top Header -->
+    <header>
+        <a href="#" class="logo">JEWELIO</a>
+
+        <nav class="admin-nav">
+            <a href="#" class="active">Dashboard</a>
+            <a href="#">Products</a>
+            <a href="#">Orders</a>
+            <a href="#">Customers</a>
+            <a href="#">Settings</a>
+        </nav>
+
+        <div class="icons">
+            <a href="#" class="fas fa-heart" title="Wishlist"></a>
+            <a href="#" class="fas fa-shopping-cart" title="Cart"></a>
+            <a href="adminlogin.php" class="fas fa-user" title="Admin Login"></a>
+        </div>
+    </header>
+
+    <!-- HOME SECTION -->
+    <section class="home" id="home">
+        <div class="overlay"></div>
+        <div class="content">
+            <h3>Welcome Admin</h3>
+            <span>Jewelio – Admin Panel</span>
+            <p>
+               Our brand creates timeless demi-fine jewelry that blends 
+               everyday elegance with exceptional craftsmanship, designed to elevate every moment.
+            </p>
+        </div>
+    </section>
+
+    <!-- Main Dashboard -->
+    <div class="main">
+
+        <h2>Dashboard Overview</h2>
+
+        <div class="cards">
+            <div class="card">
+                <h3>Total Orders</h3>
+                <p>142</p>
+            </div>
+
+            <div class="card">
+                <h3>Total Customers</h3>
+                <p>98</p>
+            </div>
+
+            <div class="card">
+                <h3>Total Revenue</h3>
+                <p>Rs 1,68,000</p>
+            </div>
+
+            <div class="card">
+                <h3>Products Listed</h3>
+                <p>54</p>
+            </div>
+        </div>
+
+        <div class="table-box">
+            <h3>Recent Orders</h3>
+
+            <table>
+                <tr>
+                    <th>Order ID</th>
+                    <th>Customer</th>
+                    <th>Total</th>
+                    <th>Status</th>
+                </tr>
+
+                <tr>
+                    <td>#00123</td>
+                    <td>Riya Sharma</td>
+                    <td>Rs 8500</td>
+                    <td class="status shipped">Shipped</td>
+                </tr>
+
+                <tr>
+                    <td>#00124</td>
+                    <td>Arjun</td>
+                    <td>Rs 4200</td>
+                    <td class="status pending">Pending</td>
+                </tr>
+
+                <tr>
+                    <td>#00125</td>
+                    <td>Neha</td>
+                    <td>Rs 12,600</td>
+                    <td class="status delivered">Delivered</td>
+                </tr>
+
+            </table>
+
+        </div>
+
+    </div>
+
+
+</body>
+</html>
