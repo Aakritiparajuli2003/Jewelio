@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase/firebase_options.dart';
-import 'screens/login_screen.dart';
 import 'screens/onboarding_screen.dart'; 
 
 void main() async {
@@ -23,17 +22,17 @@ class MyApp extends StatelessWidget {
   }
 }
 
-// Optional: If you want to keep a demo home page
-class MyHomePage extends StatefulWidget {
-  const MyHomePage({super.key, required this.title});
+
+class MyHomescreen extends StatefulWidget {
+  const MyHomescreen({super.key, required this.title});
 
   final String title;
 
   @override
-  State<MyHomePage> createState() => _MyHomePageState();
+  State<MyHomescreen> createState() => _MyHomescreenState();
 }
 
-class _MyHomePageState extends State<MyHomePage> {
+class _MyHomescreenState extends State<MyHomescreen> {
   int _counter = 0;
 
   void _incrementCounter() {
