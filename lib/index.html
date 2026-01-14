@@ -3,14 +3,14 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Admin Login</title>
+<title>Jewelio Admin Login</title>
 
 <style>
     body {
         margin: 0;
         padding: 0;
         font-family: Arial, sans-serif;
-        background: #ffffff;
+        background: #f7f7f7;
         display: flex;
         justify-content: center;
         align-items: center;
@@ -19,21 +19,22 @@
 
     .container {
         width: 360px;
-        padding: 20px;
+        padding: 25px 20px;
+        background: #fff;
+        border-radius: 12px;
+        box-shadow: 0 8px 20px rgba(0,0,0,0.1);
     }
 
     h1 {
-        font-size: 27px;
+        font-size: 26px;
         font-weight: 700;
         margin-bottom: 10px;
-        text-align: left;
     }
 
     p.subtitle {
-        margin-top: -5px;
-        margin-bottom: 25px;
-        font-size: 16px;
+        margin: -5px 0 25px;
         color: #555;
+        font-size: 15px;
     }
 
     .input-box {
@@ -46,7 +47,7 @@
         border: 1px solid #e6e6e6;
         border-radius: 10px;
         background: #fafafa;
-        font-size: 15px;
+        font-size: 14px;
         outline: none;
     }
 
@@ -66,10 +67,7 @@
 
     .btn {
         width: 100%;
-        background: #ef6516;
-
         background: #0097a7;
-
         padding: 14px;
         color: white;
         border-radius: 10px;
@@ -86,9 +84,9 @@
     }
 
     .signup a {
-
         text-decoration: none;
         font-weight: bold;
+        color: #0097a7;
     }
 
     .divider {
@@ -106,13 +104,13 @@
     .divider span {
         margin: 0 10px;
         color: #999;
-        font-size: 14px;
+        font-size: 13px;
     }
 
     .social-icons {
         display: flex;
         justify-content: center;
-        gap: 20px;
+        gap: 15px;
         margin-top: 10px;
     }
 
@@ -121,14 +119,12 @@
         cursor: pointer;
     }
 </style>
-
 </head>
 <body>
 
 <div class="container">
-
-    <h1>Welcome back! Glad to<br>see you!</h1>
-    <p class="subtitle"></p>
+    <h1>Welcome back!</h1>
+    <p class="subtitle">Sign in to your admin account</p>
 
     <!-- Email -->
     <div class="input-box">
@@ -152,18 +148,16 @@
     <!-- Divider -->
     <div class="divider">
         <div></div>
-        <span>Or Login with</span>
+        <span>Or login with</span>
         <div></div>
     </div>
 
     <!-- Social icons -->
     <div class="social-icons">
-        <img src="../assets/fb.png">
-<img src="../assets/google.png">
-<img src="../assets/insta.png">
-
+        <img src="./fb.png" alt="Facebook">
+        <img src="./google.png" alt="Google">
+        <img src="./insta.png" alt="Instagram">
     </div>
-
 </div>
 
 <script>
@@ -172,6 +166,7 @@ function login() {
     const pass = document.getElementById("adminPass").value.trim();
 
     if(email === "sam@gmail.com" && pass === "1234") {
+        // Redirect to dashboard after login
         window.location.href = "dashboard.html";
     } else {
         alert("Invalid email or password!");

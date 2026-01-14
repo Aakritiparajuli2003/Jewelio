@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:jewelio/screens/home_screen.dart';
 import 'package:jewelio/screens/signup_screen.dart';
 import 'package:jewelio/screens/login_screen.dart'; // ✅ added
 

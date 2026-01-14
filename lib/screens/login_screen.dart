@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
+
 import 'package:jewelio/screens/home_screen.dart';
 import 'package:jewelio/screens/signup_screen.dart';
 
@@ -15,7 +15,6 @@ class _LoginScreenState extends State<LoginScreen> {
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
   final FirebaseAuth _auth = FirebaseAuth.instance;
-  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
   bool isLoading = false;
 
@@ -28,19 +27,22 @@ class _LoginScreenState extends State<LoginScreen> {
       );
 
       if (!mounted) return;
-      ScaffoldMessenger.of(context)
-          .showSnackBar(const SnackBar(content: Text('Login Successful')));
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(const SnackBar(content: Text('Login Successful')));
 
-      Future.delayed(const Duration(seconds: 2), () {
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(builder: (context) => HomeScreen()),
-        );
-      });
+      await Future.delayed(const Duration(seconds: 2));
+
+      if (!mounted) return;
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (context) => HomeScreen()),
+      );
     } catch (e) {
       if (!mounted) return;
-      ScaffoldMessenger.of(context)
-          .showSnackBar(SnackBar(content: Text('Login Failed: $e')));
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text('Login Failed: $e')));
     } finally {
       if (mounted) setState(() => isLoading = false);
     }
@@ -56,8 +58,9 @@ class _LoginScreenState extends State<LoginScreen> {
       );
     } catch (e) {
       if (!mounted) return;
-      ScaffoldMessenger.of(context)
-          .showSnackBar(SnackBar(content: Text('Reset failed: $e')));
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text('Reset failed: $e')));
     }
   }
 
@@ -77,16 +80,12 @@ class _LoginScreenState extends State<LoginScreen> {
               child: SizedBox(
                 height: 350,
                 width: double.infinity,
-                child: Image.asset(
-                  "assets/signup.jpg",
-                  fit: BoxFit.cover,
-                ),
+                child: Image.asset("assets/signup.jpg", fit: BoxFit.cover),
               ),
             ),
 
             const SizedBox(height: 20),
 
-           
             const Text(
               "Welcome Back!",
               style: TextStyle(
@@ -98,15 +97,11 @@ class _LoginScreenState extends State<LoginScreen> {
             const SizedBox(height: 5),
             const Text(
               "Enter your email and password",
-              style: TextStyle(
-                fontSize: 18,
-                color: Colors.grey,
-              ),
+              style: TextStyle(fontSize: 18, color: Colors.grey),
             ),
 
             const SizedBox(height: 35),
 
-        
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 30),
               child: Column(
@@ -118,16 +113,12 @@ class _LoginScreenState extends State<LoginScreen> {
                       SizedBox(width: 10),
                       Text(
                         "Email",
-                        style: TextStyle(
-                          fontSize: 18,
-                          color: Colors.grey,
-                        ),
+                        style: TextStyle(fontSize: 18, color: Colors.grey),
                       ),
                     ],
                   ),
                   const SizedBox(height: 5),
 
-                  
                   TextField(
                     controller: emailController,
                     decoration: const InputDecoration(
@@ -140,7 +131,6 @@ class _LoginScreenState extends State<LoginScreen> {
 
             const SizedBox(height: 25),
 
-            
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 30),
               child: Column(
@@ -152,10 +142,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       SizedBox(width: 10),
                       Text(
                         "Password",
-                        style: TextStyle(
-                          fontSize: 18,
-                          color: Colors.grey,
-                        ),
+                        style: TextStyle(fontSize: 18, color: Colors.grey),
                       ),
                     ],
                   ),
@@ -190,7 +177,6 @@ class _LoginScreenState extends State<LoginScreen> {
 
             const SizedBox(height: 35),
 
-    
             isLoading
                 ? const CircularProgressIndicator()
                 : Padding(
@@ -217,7 +203,6 @@ class _LoginScreenState extends State<LoginScreen> {
 
             const SizedBox(height: 30),
 
-           
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: const [
@@ -227,10 +212,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 ),
                 Padding(
                   padding: EdgeInsets.symmetric(horizontal: 12),
-                  child: Text(
-                    "or",
-                    style: TextStyle(fontSize: 18),
-                  ),
+                  child: Text("or", style: TextStyle(fontSize: 18)),
                 ),
                 SizedBox(
                   width: 110,
@@ -241,7 +223,6 @@ class _LoginScreenState extends State<LoginScreen> {
 
             const SizedBox(height: 30),
 
-           
             GestureDetector(
               onTap: () {
                 Navigator.push(

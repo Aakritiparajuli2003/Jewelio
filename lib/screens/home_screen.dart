@@ -1,13 +1,12 @@
-
 import 'package:flutter/material.dart';
 import 'login_screen.dart';
 import 'explore_page.dart';
-import 'checkout_screen.dart';
+
 import 'cart_screen.dart';
 import 'profile_page.dart';
 
 class HomeScreen extends StatefulWidget {
-  const HomeScreen({Key? key}) : super(key: key);
+  const HomeScreen({super.key});
 
   @override
   State<HomeScreen> createState() => _HomeScreenState();
@@ -24,10 +23,7 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   void _goToExplorePage() {
-    Navigator.push(
-      context,
-      MaterialPageRoute(builder: (_) => ExplorePage()),
-    );
+    Navigator.push(context, MaterialPageRoute(builder: (_) => ExplorePage()));
   }
 
   void _goToProfilePage() {
@@ -68,8 +64,11 @@ class _HomeScreenState extends State<HomeScreen> {
           Stack(
             children: [
               IconButton(
-                onPressed: _goToCartPage, 
-                icon: const Icon(Icons.shopping_cart_outlined, color: Colors.black87),
+                onPressed: _goToCartPage,
+                icon: const Icon(
+                  Icons.shopping_cart_outlined,
+                  color: Colors.black87,
+                ),
               ),
               Positioned(
                 right: 6,
@@ -116,7 +115,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         color: const Color.fromARGB(255, 2, 0, 3),
                         blurRadius: 6,
                         offset: const Offset(0, 3),
-                      )
+                      ),
                     ],
                   ),
                   child: const Padding(
@@ -227,15 +226,24 @@ class _HomeScreenState extends State<HomeScreen> {
             currentIndex = index;
           });
           if (index == 1) _goToExplorePage(); // Search tab
-          if (index == 3) _goToCartPage();    // Cart tab
+          if (index == 3) _goToCartPage(); // Cart tab
           if (index == 4) _goToProfilePage(); // Profile tab
         },
         items: const [
-          BottomNavigationBarItem(icon: Icon(Icons.home_outlined), label: "Home"),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.home_outlined),
+            label: "Home",
+          ),
           BottomNavigationBarItem(icon: Icon(Icons.search), label: "Search"),
           BottomNavigationBarItem(icon: Icon(Icons.storefront), label: "Store"),
-          BottomNavigationBarItem(icon: Icon(Icons.shopping_cart_outlined), label: "Cart"),
-          BottomNavigationBarItem(icon: Icon(Icons.person_outline), label: "Profile"),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.shopping_cart_outlined),
+            label: "Cart",
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.person_outline),
+            label: "Profile",
+          ),
         ],
       ),
     );
@@ -248,10 +256,7 @@ class _HomeScreenState extends State<HomeScreen> {
         width: 160,
         height: 210,
         decoration: BoxDecoration(
-          image: DecorationImage(
-            image: AssetImage(img),
-            fit: BoxFit.cover,
-          ),
+          image: DecorationImage(image: AssetImage(img), fit: BoxFit.cover),
         ),
         child: Align(
           alignment: Alignment.bottomCenter,
