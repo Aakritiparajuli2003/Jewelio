@@ -22,17 +22,17 @@ class MyApp extends StatelessWidget {
   }
 }
 
-// Optional: If you want to keep a demo home page
-class MyHomePage extends StatefulWidget {
-  const MyHomePage({super.key, required this.title});
+
+class MyHomescreen extends StatefulWidget {
+  const MyHomescreen({super.key, required this.title});
 
   final String title;
 
   @override
-  State<MyHomePage> createState() => _MyHomePageState();
+  State<MyHomescreen> createState() => _MyHomescreenState();
 }
 
-class _MyHomePageState extends State<MyHomePage> {
+class _MyHomescreenState extends State<MyHomescreen> {
   int _counter = 0;
 
   void _incrementCounter() {

@@ -1,0 +1,31 @@
+{
+  "name": "jewelio",
+  "version": "1.0.0",
+  "description": "HEAD\r # Jewelio",
+  "main": "index.js",
+  "directories": {
+    "lib": "lib",
+    "test": "test"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Aakritiparajuli2003/Jewelio.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/Aakritiparajuli2003/Jewelio/issues"
+  },
+  "homepage": "https://github.com/Aakritiparajuli2003/Jewelio#readme",
+  "dependencies": {
+    "body-parser": "^2.2.2",
+    "cors": "^2.8.5",
+    "express": "^5.2.1",
+    "firebase-admin": "^13.6.0"
+  }
+}

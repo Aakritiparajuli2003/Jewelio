@@ -1,1 +1,6 @@
-{"flutter":{"platforms":{"android":{"default":{"projectId":"jewelio","appId":"1:1028255303356:android:8ecdb1b1053efdd5baf2b9","fileOutput":"android/app/google-services.json"}},"dart":{"lib/firebase_options.dart":{"projectId":"jewelio","configurations":{"android":"1:1028255303356:android:8ecdb1b1053efdd5baf2b9","ios":"1:1028255303356:ios:dc1b3c524a6801efbaf2b9","macos":"1:1028255303356:ios:dc1b3c524a6801efbaf2b9","web":"1:1028255303356:web:48fdedaaeaf80e93baf2b9","windows":"1:1028255303356:web:94a2f64fc54c3a10baf2b9"}}}}}}
+{"flutter":{"platforms":{"android":{"default":{"projectId":"jewelio","appId":"1:1028255303356:android:8ecdb1b1053efdd5baf2b9","fileOutput":"android/app/google-services.json"}},
+"dart":{"lib/firebase_options.dart":{"projectId":"jewelio","configurations":{"android":"1:1028255303356:android:8ecdb1b1053efdd5baf2b9",
+"ios":"1:1028255303356:ios:dc1b3c524a6801efbaf2b9",
+"macos":"1:1028255303356:ios:dc1b3c524a6801efbaf2b9",
+"web":"1:1028255303356:web:48fdedaaeaf80e93baf2b9",
+"windows":"1:1028255303356:web:94a2f64fc54c3a10baf2b9"}}}}}}
