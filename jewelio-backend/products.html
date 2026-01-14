@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Products - Jewelio Admin</title>
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="public/css/admin.css">
+</head>
+
+<body>
+    <!-- Header -->
+    <header class="header">
+        <a href="dashboard.html" class="logo">JEWELIO</a>
+
+        <div class="header-right">
+            <div class="user-info">
+                <div class="user-avatar">A</div>
+                <span id="userEmail">Admin</span>
+            </div>
+            <button class="logout-btn" id="logoutBtn">
+                <i class="fas fa-sign-out-alt"></i> Logout
+            </button>
+        </div>
+    </header>
+
+    <!-- Sidebar -->
+    <aside class="sidebar">
+        <nav>
+            <ul class="nav-menu">
+                <li class="nav-item">
+                    <a href="dashboard.html" class="nav-link">
+                        <i class="fas fa-chart-line"></i>
+                        <span>Dashboard</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="products.html" class="nav-link active">
+                        <i class="fas fa-gem"></i>
+                        <span>Products</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="orders.html" class="nav-link">
+                        <i class="fas fa-shopping-cart"></i>
+                        <span>Orders</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="customer.html" class="nav-link">
+                        <i class="fas fa-users"></i>
+                        <span>Customers</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="settings.html" class="nav-link">
+                        <i class="fas fa-cog"></i>
+                        <span>Settings</span>
+                    </a>
+                </li>
+            </ul>
+        </nav>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <div class="page-header">
+            <h1 class="page-title">Products Management</h1>
+            <p class="page-subtitle">Manage your jewelry collection</p>
+        </div>
+
+        <!-- Actions Bar -->
+        <div class="card">
+            <div class="card-header">
+                <div class="form-group" style="margin: 0; flex: 1; max-width: 400px;">
+                    <input type="text" id="searchInput" class="form-input" placeholder="Search products..."
+                        oninput="searchProducts()">
+                </div>
+                <button class="btn btn-primary" id="addProductBtn">
+                    <i class="fas fa-plus"></i> Add Product
+                </button>
+            </div>
+
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Image</th>
+                            <th>Name</th>
+                            <th>Category</th>
+                            <th>Price</th>
+                            <th>Stock</th>
+                            <th>Created</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="productsTableBody">
+                        <tr>
+                            <td colspan="7" class="text-center">Loading products...</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </main>
+
+    <!-- Add/Edit Product Modal -->
+    <div id="productModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title" id="modalTitle">Add New Product</h3>
+                <button class="modal-close" onclick="closeModal('productModal')">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+
+            <form id="productForm">
+                <div class="form-group">
+                    <label for="productName" class="form-label">Product Name *</label>
+                    <input type="text" id="productName" class="form-input" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="productCategory" class="form-label">Category</label>
+                    <select id="productCategory" class="form-select">
+                        <option value="Rings">Rings</option>
+                        <option value="Necklaces">Necklaces</option>
+                        <option value="Earrings">Earrings</option>
+                        <option value="Bracelets">Bracelets</option>
+                        <option value="Pendants">Pendants</option>
+                        <option value="Other">Other</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="productPrice" class="form-label">Price (Rs) *</label>
+                    <input type="number" id="productPrice" class="form-input" min="0" step="0.01" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="productStock" class="form-label">Stock Quantity</label>
+                    <input type="number" id="productStock" class="form-input" min="0" value="0">
+                </div>
+
+                <div class="form-group">
+                    <label for="productImage" class="form-label">Image URL</label>
+                    <input type="url" id="productImage" class="form-input" placeholder="https://example.com/image.jpg">
+                </div>
+
+                <div class="form-group">
+                    <label for="productDescription" class="form-label">Description</label>
+                    <textarea id="productDescription" class="form-textarea"></textarea>
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" onclick="closeModal('productModal')">
+                        Cancel
+                    </button>
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-save"></i> Save Product
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- JavaScript -->
+    <script src="public/js/common.js"></script>
+    <script src="public/js/products.js"></script>
+    <script>
+        const userEmail = localStorage.getItem('adminEmail');
+        if (userEmail) {
+            document.getElementById('userEmail').textContent = userEmail.split('@')[0];
+            document.querySelector('.user-avatar').textContent = userEmail.charAt(0).toUpperCase();
+        }
+    </script>
+</body>
+
+</html>

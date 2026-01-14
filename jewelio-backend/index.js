@@ -1,42 +1,42 @@
 const express = require("express");
 const bodyParser = require("body-parser");
 const cors = require("cors");
-const db = require("./firebase");
+const path = require("path");
 
 const app = express();
+
+// Middleware
 app.use(cors());
 app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
 
-// TEST API
+// Serve static files (HTML, CSS, JS)
+app.use(express.static(__dirname));
+app.use('/public', express.static(path.join(__dirname, 'public')));
+
+// Import routes
+const authRoutes = require('./routes/auth');
+const productsRoutes = require('./routes/products');
+const ordersRoutes = require('./routes/orders');
+const customersRoutes = require('./routes/customers');
+const dashboardRoutes = require('./routes/dashboard');
+
+// API Routes
+app.use('/api/auth', authRoutes);
+app.use('/api/products', productsRoutes);
+app.use('/api/orders', ordersRoutes);
+app.use('/api/customers', customersRoutes);
+app.use('/api/dashboard', dashboardRoutes);
+
+// Root route - redirect to login
 app.get("/", (req, res) => {
-  res.send("Jewelry Backend Running");
+  res.redirect('/login.html');
 });
 
-// ADD PRODUCT (Admin)
-app.post("/addProduct", async (req, res) => {
-  const { name, price, image } = req.body;
-
-  await db.collection("products").add({
-    name,
-    price,
-    image
-  });
-
-  res.send("Product Added");
-});
-
-// GET ALL PRODUCTS (Flutter)
-app.get("/products", async (req, res) => {
-  const snapshot = await db.collection("products").get();
-  let products = [];
-
-  snapshot.forEach(doc => {
-    products.push({ id: doc.id, ...doc.data() });
-  });
-
-  res.json(products);
-});
-
-app.listen(3000, () => {
-  console.log("Server running on port 3000");
+// Start server
+const PORT = process.env.PORT || 3000;
+app.listen(PORT, () => {
+  console.log(`✅ Jewelio Admin Dashboard Server running on http://localhost:${PORT}`);
+  console.log(`📊 Dashboard: http://localhost:${PORT}/dashboard.html`);
+  console.log(`🔐 Login: http://localhost:${PORT}/login.html`);
 });

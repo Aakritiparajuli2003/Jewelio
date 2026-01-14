@@ -57,4 +57,27 @@ class FirestoreService {
       "uploadedAt": FieldValue.serverTimestamp(),
     });
   }
+
+  // ------------------ INITIALIZE ALL COLLECTIONS ------------------
+  Future<void> createAllCollections() async {
+    // Create sample categories
+    await createCategory(
+      name: "Rings",
+      description: "Beautiful gold and diamond rings",
+    );
+
+    await createCategory(
+      name: "Necklaces",
+      description: "Elegant necklaces for all occasions",
+    );
+
+    await createCategory(
+      name: "Earrings",
+      description: "Stunning earrings collection",
+    );
+
+    // Note: To create products, you'll need category IDs
+    // You might want to fetch the created categories first
+    // or handle this differently based on your needs
+  }
 }
