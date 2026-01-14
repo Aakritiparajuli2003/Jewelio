@@ -11,20 +11,22 @@ document.addEventListener('DOMContentLoaded', async () => {
 // Load dashboard statistics
 async function loadDashboardStats() {
     try {
-        showLoading('statsContainer');
+        // Don't use showLoading for statsContainer as it clears the stat cards
+        // Instead, we can add a loading class to the cards or just wait for stats
 
         const data = await api.get('/dashboard/stats');
         dashboardData = data;
 
         // Update stat cards
-        document.getElementById('totalProducts').textContent = data.totalProducts || 0;
-        document.getElementById('totalOrders').textContent = data.totalOrders || 0;
-        document.getElementById('totalRevenue').textContent = formatCurrency(data.totalRevenue || 0);
-        document.getElementById('totalCustomers').textContent = data.totalCustomers || 0;
+        const productsEl = document.getElementById('totalProducts');
+        const ordersEl = document.getElementById('totalOrders');
+        const revenueEl = document.getElementById('totalRevenue');
+        const customersEl = document.getElementById('totalCustomers');
 
-        // Remove loading spinner
-        const spinner = document.querySelector('.spinner');
-        if (spinner) spinner.remove();
+        if (productsEl) productsEl.textContent = data.totalProducts || 0;
+        if (ordersEl) ordersEl.textContent = data.totalOrders || 0;
+        if (revenueEl) revenueEl.textContent = formatCurrency(data.totalRevenue || 0);
+        if (customersEl) customersEl.textContent = data.totalCustomers || 0;
 
     } catch (error) {
         console.error('Failed to load dashboard stats:', error);

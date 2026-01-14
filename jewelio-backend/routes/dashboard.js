@@ -5,13 +5,28 @@ const db = require('../firebase');
 // GET dashboard statistics
 router.get('/stats', async (req, res) => {
     try {
-        // Get products count
-        const productsSnapshot = await db.collection('products').get();
-        const totalProducts = productsSnapshot.size;
+        console.log("📊 API: Fetching dashboard stats...");
 
-        // Get orders data
-        const ordersSnapshot = await db.collection('orders').get();
-        let totalOrders = 0;
+        // Get counts using aggregation
+        const productsCountSnapshot = await db.collection('products').count().get();
+        const totalProducts = productsCountSnapshot.data().count;
+        console.log(`- Total Products Found: ${totalProducts}`);
+
+        const ordersCountSnapshot = await db.collection('orders').count().get();
+        const totalOrders = ordersCountSnapshot.data().count;
+        console.log(`- Total Orders Found: ${totalOrders}`);
+
+        const usersCountSnapshot = await db.collection('users').count().get();
+        const totalCustomers = usersCountSnapshot.data().count;
+        console.log(`- Total Customers Found: ${totalCustomers}`);
+
+        // Get revenue and status breakdown
+        const ordersSnapshot = await db.collection('orders')
+            .limit(100)
+            .get();
+
+        console.log(`- Orders Snapshot Size: ${ordersSnapshot.size}`);
+
         let totalRevenue = 0;
         let pendingOrders = 0;
         let shippedOrders = 0;
@@ -19,8 +34,7 @@ router.get('/stats', async (req, res) => {
 
         ordersSnapshot.forEach(doc => {
             const order = doc.data();
-            totalOrders++;
-            totalRevenue += order.total || 0;
+            totalRevenue += order.totalAmount || 0;
 
             const status = (order.status || 'pending').toLowerCase();
             if (status === 'pending') pendingOrders++;
@@ -28,22 +42,24 @@ router.get('/stats', async (req, res) => {
             else if (status === 'delivered') deliveredOrders++;
         });
 
-        // Get customers count
-        const customersSnapshot = await db.collection('customers').get();
-        const totalCustomers = customersSnapshot.size;
-
         // Get recent orders (last 5)
         const recentOrdersSnapshot = await db.collection('orders')
-            .orderBy('createdAt', 'desc')
             .limit(5)
             .get();
 
         const recentOrders = [];
         recentOrdersSnapshot.forEach(doc => {
-            recentOrders.push({ id: doc.id, ...doc.data() });
+            const data = doc.data();
+            recentOrders.push({
+                id: doc.id,
+                ...data,
+                total: data.totalAmount || 0,
+                customerName: data.userID || 'Guest',
+                createdAt: data.created_at ? new Date(data.created_at._seconds * 1000).toISOString() : ''
+            });
         });
 
-        res.json({
+        const stats = {
             totalProducts,
             totalOrders,
             totalRevenue,
@@ -54,8 +70,12 @@ router.get('/stats', async (req, res) => {
                 delivered: deliveredOrders
             },
             recentOrders
-        });
+        };
+
+        console.log("✅ Stats compiled:", JSON.stringify(stats, null, 2).substring(0, 100) + "...");
+        res.json(stats);
     } catch (error) {
+        console.error("❌ Dashboard API Error:", error);
         res.status(500).json({ error: error.message });
     }
 });

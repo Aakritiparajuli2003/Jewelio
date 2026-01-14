@@ -5,7 +5,7 @@ const db = require('../firebase');
 // GET all customers
 router.get('/', async (req, res) => {
     try {
-        const snapshot = await db.collection('customers').get();
+        const snapshot = await db.collection('users').limit(20).get();
         const customers = [];
 
         snapshot.forEach(doc => {
@@ -21,7 +21,7 @@ router.get('/', async (req, res) => {
 // GET single customer
 router.get('/:id', async (req, res) => {
     try {
-        const doc = await db.collection('customers').doc(req.params.id).get();
+        const doc = await db.collection('users').doc(req.params.id).get();
 
         if (!doc.exists) {
             return res.status(404).json({ error: 'Customer not found' });
@@ -36,8 +36,8 @@ router.get('/:id', async (req, res) => {
 // GET customer statistics
 router.get('/stats/summary', async (req, res) => {
     try {
-        const snapshot = await db.collection('customers').get();
-        const totalCustomers = snapshot.size;
+        const snapshot = await db.collection('users').count().get();
+        const totalCustomers = snapshot.data().count;
 
         res.json({
             totalCustomers

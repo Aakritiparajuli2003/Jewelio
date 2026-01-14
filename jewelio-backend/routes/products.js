@@ -1,15 +1,23 @@
 const express = require('express');
 const router = express.Router();
 const db = require('../firebase');
+const { admin } = require('../firebase');
 
 // GET all products
 router.get('/', async (req, res) => {
     try {
-        const snapshot = await db.collection('products').get();
+        const snapshot = await db.collection('products').limit(20).get();
         const products = [];
 
         snapshot.forEach(doc => {
-            products.push({ id: doc.id, ...doc.data() });
+            const data = doc.data();
+            products.push({
+                id: doc.id,
+                ...data,
+                image: data.image_url || '',
+                category: data.category_id || '',
+                createdAt: data.created_at ? new Date(data.created_at._seconds * 1000).toISOString() : ''
+            });
         });
 
         res.json(products);
@@ -27,7 +35,14 @@ router.get('/:id', async (req, res) => {
             return res.status(404).json({ error: 'Product not found' });
         }
 
-        res.json({ id: doc.id, ...doc.data() });
+        const data = doc.data();
+        res.json({
+            id: doc.id,
+            ...data,
+            image: data.image_url || '',
+            category: data.category_id || '',
+            createdAt: data.created_at ? new Date(data.created_at._seconds * 1000).toISOString() : ''
+        });
     } catch (error) {
         res.status(500).json({ error: error.message });
     }
@@ -45,11 +60,11 @@ router.post('/', async (req, res) => {
         const productData = {
             name,
             price: parseFloat(price),
-            category: category || 'Uncategorized',
+            category_id: category || 'Uncategorized',
             description: description || '',
-            image: image || '',
+            image_url: image || '',
             stock: parseInt(stock) || 0,
-            createdAt: new Date().toISOString()
+            created_at: admin.firestore.FieldValue.serverTimestamp()
         };
 
         const docRef = await db.collection('products').add(productData);
@@ -68,11 +83,11 @@ router.put('/:id', async (req, res) => {
         const updateData = {
             ...(name && { name }),
             ...(price && { price: parseFloat(price) }),
-            ...(category && { category }),
+            ...(category && { category_id: category }),
             ...(description !== undefined && { description }),
-            ...(image !== undefined && { image }),
+            ...(image !== undefined && { image_url: image }),
             ...(stock !== undefined && { stock: parseInt(stock) }),
-            updatedAt: new Date().toISOString()
+            updated_at: admin.firestore.FieldValue.serverTimestamp()
         };
 
         await db.collection('products').doc(req.params.id).update(updateData);

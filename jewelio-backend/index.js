@@ -1,3 +1,4 @@
+require('dotenv').config();
 const express = require("express");
 const bodyParser = require("body-parser");
 const cors = require("cors");
@@ -10,9 +11,11 @@ app.use(cors());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
-// Serve static files (HTML, CSS, JS)
-app.use(express.static(__dirname));
+// Serve static files (CSS, JS, images)
 app.use('/public', express.static(path.join(__dirname, 'public')));
+
+// Serve views (HTML files)
+app.use('/views', express.static(path.join(__dirname, 'views')));
 
 // Import routes
 const authRoutes = require('./routes/auth');
@@ -30,13 +33,13 @@ app.use('/api/dashboard', dashboardRoutes);
 
 // Root route - redirect to login
 app.get("/", (req, res) => {
-  res.redirect('/login.html');
+  res.redirect('/views/login.html');
 });
 
 // Start server
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
   console.log(`✅ Jewelio Admin Dashboard Server running on http://localhost:${PORT}`);
-  console.log(`📊 Dashboard: http://localhost:${PORT}/dashboard.html`);
-  console.log(`🔐 Login: http://localhost:${PORT}/login.html`);
+  console.log(`📊 Dashboard: http://localhost:${PORT}/views/dashboard.html`);
+  console.log(`🔐 Login: http://localhost:${PORT}/views/login.html`);
 });

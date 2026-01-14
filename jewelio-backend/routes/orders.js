@@ -5,11 +5,20 @@ const db = require('../firebase');
 // GET all orders
 router.get('/', async (req, res) => {
     try {
-        const snapshot = await db.collection('orders').orderBy('createdAt', 'desc').get();
+        const snapshot = await db.collection('orders')
+            .limit(20)
+            .get();
         const orders = [];
 
         snapshot.forEach(doc => {
-            orders.push({ id: doc.id, ...doc.data() });
+            const data = doc.data();
+            orders.push({
+                id: doc.id,
+                ...data,
+                total: data.totalAmount || 0,
+                customerName: data.userID || 'Guest',
+                createdAt: data.created_at ? new Date(data.created_at._seconds * 1000).toISOString() : ''
+            });
         });
 
         res.json(orders);
@@ -27,7 +36,14 @@ router.get('/:id', async (req, res) => {
             return res.status(404).json({ error: 'Order not found' });
         }
 
-        res.json({ id: doc.id, ...doc.data() });
+        const data = doc.data();
+        res.json({
+            id: doc.id,
+            ...data,
+            total: data.totalAmount || 0,
+            customerName: data.userID || 'Guest',
+            createdAt: data.created_at ? new Date(data.created_at._seconds * 1000).toISOString() : ''
+        });
     } catch (error) {
         res.status(500).json({ error: error.message });
     }
@@ -56,15 +72,21 @@ router.put('/:id/status', async (req, res) => {
 // GET order statistics
 router.get('/stats/summary', async (req, res) => {
     try {
-        const snapshot = await db.collection('orders').get();
-        let totalOrders = 0;
+        // Use count() for total orders
+        const countSnapshot = await db.collection('orders').count().get();
+        const totalOrders = countSnapshot.data().count;
+
+        // For revenue and status breakdown, we scan the last 100 orders
+        const snapshot = await db.collection('orders')
+            .limit(100)
+            .get();
+
         let totalRevenue = 0;
         const statusCount = {};
 
         snapshot.forEach(doc => {
             const order = doc.data();
-            totalOrders++;
-            totalRevenue += order.total || 0;
+            totalRevenue += order.totalAmount || 0;
 
             const status = order.status || 'pending';
             statusCount[status] = (statusCount[status] || 0) + 1;
@@ -72,7 +94,7 @@ router.get('/stats/summary', async (req, res) => {
 
         res.json({
             totalOrders,
-            totalRevenue,
+            totalRevenue, // Revenue from last 100 orders
             statusCount
         });
     } catch (error) {
