@@ -3,12 +3,6 @@ const { db } = require('../firebase');
 // GET dashboard statistics
 exports.getStats = async (req, res) => {
     try {
-        console.log("📊 Controller: Fetching dashboard stats...");
-        console.log("DB check:", db ? "Exists" : "MISSING", typeof db);
-        if (db && db.collection) {
-            console.log("Collections method exists");
-        }
-
         const productsCountSnapshot = await db.collection('products').count().get();
         const totalProducts = productsCountSnapshot.data().count;
 
@@ -17,12 +11,6 @@ exports.getStats = async (req, res) => {
 
         const usersCountSnapshot = await db.collection('users').count().get();
         const totalCustomers = usersCountSnapshot.data().count;
-
-        // NEW: Debug info
-        const debugInfo = {
-            envFound: !!(process.env.FIREBASE_PROJECT_ID && process.env.FIREBASE_PRIVATE_KEY),
-            projectId: process.env.FIREBASE_PROJECT_ID || 'MISSING'
-        };
 
         // Get revenue and status breakdown
         const ordersSnapshot = await db.collection('orders')
@@ -71,13 +59,11 @@ exports.getStats = async (req, res) => {
                 shipped: shippedOrders,
                 delivered: deliveredOrders
             },
-            recentOrders,
-            debugInfo
+            recentOrders
         };
 
         res.json(stats);
     } catch (error) {
-        console.error("❌ Dashboard Controller Error:", error);
         res.status(500).json({ error: error.message });
     }
 };

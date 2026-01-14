@@ -3,14 +3,25 @@
   "version": "1.0.0",
   "description": "Jewelio Admin Dashboard Backend",
   "main": "index.js",
+  "private": true,
   "scripts": {
     "start": "node index.js",
     "dev": "nodemon index.js",
+    "build": "echo \"Ready for production\" && exit 0",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "keywords": [
+    "jewelio",
+    "admin",
+    "dashboard",
+    "firebase",
+    "express"
+  ],
+  "author": "Jewelio Team",
+  "license": "UNLICENSED",
   "dependencies": {
     "body-parser": "^2.2.2",
     "cors": "^2.8.5",
