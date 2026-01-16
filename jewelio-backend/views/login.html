@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login - Jewelio Admin</title>
+
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+  <!-- Custom CSS -->
+  <link rel="stylesheet" href="/public/css/admin.css">
+</head>
+
+<body>
+  <div class="login-container">
+    <div class="login-card">
+      <div class="login-header">
+        <div class="login-logo">JEWELIO</div>
+        <p class="login-subtitle">Admin Dashboard</p>
+      </div>
+
+      <div id="errorMessage" class="alert alert-error" style="display: none;"></div>
+
+      <form id="loginForm">
+        <div class="form-group">
+          <label for="email" class="form-label">
+            <i class="fas fa-envelope"></i> Email Address
+          </label>
+          <input type="email" id="email" class="form-input" placeholder="admin@jewelio.com" required>
+        </div>
+
+        <div class="form-group">
+          <label for="password" class="form-label">
+            <i class="fas fa-lock"></i> Password
+          </label>
+          <input type="password" id="password" class="form-input" placeholder="Enter your password" required>
+        </div>
+
+        <button type="submit" id="submitBtn" class="btn btn-primary"
+          style="width: 100%; margin-top: 1.5rem; padding: 0.75rem;">
+          <i class="fas fa-sign-in-alt"></i> Login
+        </button>
+      </form>
+
+      <div style="margin-top: 1.5rem; text-align: center; color: var(--text-muted); font-size: 0.85rem;">
+        <p>Demo: Use any email and password to login</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- JavaScript -->
+  <script src="/public/js/auth.js"></script>
+</body>
+
+</html>
