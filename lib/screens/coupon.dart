@@ -11,13 +11,13 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: CartScreen(),
+      home: const CartScreen(), // ✅ make const
     );
   }
 }
 
 class CartScreen extends StatelessWidget {
-  CartScreen({super.key});
+  const CartScreen({super.key}); // ✅ added const constructor
 
   @override
   Widget build(BuildContext context) {

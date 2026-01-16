@@ -1,10 +1,64 @@
 import 'package:flutter/material.dart';
-import 'package:jewelio/screens/home_screen.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import 'package:jewelio/screens/signup_screen.dart';
-import 'package:jewelio/screens/login_screen.dart'; // ✅ added
+import 'package:jewelio/screens/login_screen.dart';
 
-class OnboardingScreen extends StatelessWidget {
+class OnboardingScreen extends StatefulWidget {
   const OnboardingScreen({super.key});
+
+  @override
+  State<OnboardingScreen> createState() => _OnboardingScreenState();
+}
+
+class _OnboardingScreenState extends State<OnboardingScreen> {
+  bool isLoading = false;
+
+  Future<void> signInWithGoogle() async {
+    setState(() => isLoading = true);
+    try {
+      final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
+      if (googleUser == null) {
+        // User cancelled the sign-in
+        if (mounted) setState(() => isLoading = false);
+        return;
+      }
+
+      final GoogleSignInAuthentication googleAuth =
+          await googleUser.authentication;
+
+      final credential = GoogleAuthProvider.credential(
+        accessToken: googleAuth.accessToken,
+        idToken: googleAuth.idToken,
+      );
+
+      // Sign in to Firebase with Google credential
+      await FirebaseAuth.instance.signInWithCredential(credential);
+
+      if (!mounted) return;
+
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Google Sign-in Successful')),
+      );
+
+      // Navigate to LoginScreen/HomeScreen
+      Future.delayed(const Duration(seconds: 1), () {
+        if (!mounted) return;
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (_) => const LoginScreen()),
+        );
+      });
+    } catch (e) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Google Sign-in Failed: $e')),
+        );
+      }
+    } finally {
+      if (mounted) setState(() => isLoading = false);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -88,21 +142,27 @@ class OnboardingScreen extends StatelessWidget {
 
               const SizedBox(height: 16),
 
-              // Google Button
+              // Google Sign-in Button
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 24),
                 child: SizedBox(
                   width: double.infinity,
                   height: 56,
                   child: OutlinedButton.icon(
-                    onPressed: () {},
-                    icon: Image.asset(
-                      'assets/google1.png',
-                      height: 22,
-                    ),
-                    label: const Text(
-                      'Sign up with google',
-                      style: TextStyle(fontSize: 16, color: Colors.black),
+                    onPressed: isLoading ? null : signInWithGoogle,
+                    icon: isLoading
+                        ? const SizedBox(
+                            width: 24,
+                            height: 24,
+                            child: CircularProgressIndicator(strokeWidth: 2),
+                          )
+                        : Image.asset(
+                            'assets/google1.png',
+                            height: 22,
+                          ),
+                    label: Text(
+                      isLoading ? 'Signing in...' : 'Sign up with Google',
+                      style: const TextStyle(fontSize: 16, color: Colors.black),
                     ),
                     style: OutlinedButton.styleFrom(
                       side: const BorderSide(color: Colors.grey),
@@ -116,7 +176,7 @@ class OnboardingScreen extends StatelessWidget {
 
               const SizedBox(height: 18),
 
-              // ✅ Sign in (FIXED)
+              // Sign in link
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
@@ -131,7 +191,7 @@ class OnboardingScreen extends StatelessWidget {
                       );
                     },
                     child: const Text(
-                      'Sign in',
+                      'LOGIN',
                       style: TextStyle(
                         color: Color(0xFFE05252),
                         fontWeight: FontWeight.bold,
@@ -157,8 +217,7 @@ class OnboardingScreen extends StatelessWidget {
                         style: TextStyle(color: Colors.black),
                       ),
                       TextSpan(
-                        text: '.\nLearn how we use your data in our ',
-                      ),
+                        text: '.\nLearn how we use your data in our '),
                       TextSpan(
                         text: 'Privacy Policy',
                         style: TextStyle(color: Colors.black),

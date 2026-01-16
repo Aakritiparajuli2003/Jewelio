@@ -1,13 +1,15 @@
 import 'package:flutter/material.dart';
 
-class ProductDetailsPage extends StatefulWidget {
-  const ProductDetailsPage({super.key});
+class ProductDetailPage extends StatefulWidget {
+  final Map<String, dynamic> product; // Accept product data
+
+  const ProductDetailPage({super.key, required this.product});
 
   @override
-  State<ProductDetailsPage> createState() => _ProductDetailsPageState();
+  State<ProductDetailPage> createState() => _ProductDetailPageState();
 }
 
-class _ProductDetailsPageState extends State<ProductDetailsPage> {
+class _ProductDetailPageState extends State<ProductDetailPage> {
   int quantity = 1;
   int selectedColor = 0;
 
@@ -19,6 +21,8 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
 
   @override
   Widget build(BuildContext context) {
+    final product = widget.product; // Use product passed from StorePage
+
     return Scaffold(
       backgroundColor: const Color(0xFFFFFBF5),
       appBar: AppBar(
@@ -49,11 +53,11 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            /// Product Image
+            // Product Image
             ClipRRect(
               borderRadius: BorderRadius.circular(24),
-              child: Image.asset(
-                "assets/images/ring.jpg", // add image here
+              child: Image.network(
+                product['img'], // dynamically use product image
                 height: 280,
                 width: double.infinity,
                 fit: BoxFit.cover,
@@ -62,7 +66,7 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
 
             const SizedBox(height: 10),
 
-          
+            // Image indicators
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: List.generate(
@@ -81,24 +85,26 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
 
             const SizedBox(height: 20),
 
-            
+            // Product name and rating
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: const [
-                Text(
-                  "Keystone Ring",
-                  style: TextStyle(
-                    fontSize: 24,
-                    fontWeight: FontWeight.bold,
+              children: [
+                Expanded(
+                  child: Text(
+                    product['name'],
+                    style: const TextStyle(
+                      fontSize: 24,
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
                 ),
                 Row(
                   children: [
-                    Icon(Icons.star, color: Colors.red, size: 18),
-                    SizedBox(width: 4),
+                    const Icon(Icons.star, color: Colors.red, size: 18),
+                    const SizedBox(width: 4),
                     Text(
-                      "4.8 (278 Reviews)",
-                      style: TextStyle(fontSize: 14),
+                      "${product['rating']} (${product['reviews']} Reviews)",
+                      style: const TextStyle(fontSize: 14),
                     ),
                   ],
                 ),
@@ -107,17 +113,17 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
 
             const SizedBox(height: 10),
 
-            /// Description
+            // Description (static example, can be updated per product)
             RichText(
               text: const TextSpan(
                 style: TextStyle(color: Colors.black87, fontSize: 14),
                 children: [
                   TextSpan(
                     text:
-                        "This gold-plated ring features a sleek band with a rectangular gemstone at the center, blending modern design with timeless elegance.",
+                        "This jewelry piece features a modern design, crafted with precision and elegance.",
                   ),
                   TextSpan(
-                    text: "Read More",
+                    text: " Read More",
                     style: TextStyle(
                       color: Colors.red,
                       fontWeight: FontWeight.bold,
@@ -129,15 +135,15 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
 
             const SizedBox(height: 20),
 
-            
+            // Price
             const Text(
               "Price",
               style: TextStyle(fontSize: 16),
             ),
             const SizedBox(height: 6),
-            const Text(
-            "RS 2,499",
-              style: TextStyle(
+            Text(
+              "RS ${product['price']}",
+              style: const TextStyle(
                 fontSize: 26,
                 fontWeight: FontWeight.bold,
               ),
@@ -145,7 +151,7 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
 
             const SizedBox(height: 20),
 
-            
+            // Color options
             Row(
               children: List.generate(
                 colors.length,
@@ -169,11 +175,11 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
 
             const SizedBox(height: 30),
 
-           
+            // Quantity and Add to Cart
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                /// Quantity box
+                // Quantity box
                 Container(
                   decoration: BoxDecoration(
                     border: Border.all(color: Colors.grey),
@@ -203,7 +209,7 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
                   ),
                 ),
 
-                
+                // Add to cart button
                 ElevatedButton(
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.red,
@@ -214,7 +220,7 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
                     ),
                   ),
                   onPressed: () {
-                   
+                    // Add to cart logic here
                   },
                   child: const Text(
                     "Add to cart",

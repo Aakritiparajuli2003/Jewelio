@@ -28,7 +28,7 @@ class FirestoreService {
     required String name,
     required String description,
   }) async {
-    await db.collection("categories").add({
+    await db.collection("categories").doc(name.toLowerCase()).set({
       "name": name,
       "description": description,
       "createdAt": FieldValue.serverTimestamp(),
@@ -37,24 +37,48 @@ class FirestoreService {
 
   // ------------------ PRODUCTS ------------------
   Future<void> createProduct({
+    required String id,
     required String name,
     required String description,
-    required String categoryId,
+    required List<String> categories,
     required double price,
     required int stock,
+    required String imageUrl,
   }) async {
-    final productRef = await db.collection("products").add({
+    final productDocRef = db.collection("products").doc(id);
+
+    await productDocRef.set({
       "name": name,
       "description": description,
-      "categoryId": categoryId,
+      "categories": categories,
       "price": price,
       "stock": stock,
       "createdAt": FieldValue.serverTimestamp(),
     });
 
-    await productRef.collection("images").add({
-      "imageUrl": "goldring.jpg",
+    // Add product image
+    await productDocRef.collection("images").add({
+      "imageUrl": imageUrl,
       "uploadedAt": FieldValue.serverTimestamp(),
     });
+  }
+
+  // ------------------ CREATE ALL COLLECTIONS ------------------
+  Future<void> createAllCollections() async {
+    // Example categories
+    await createCategory(name: "New Arrival", description: "Latest products in the store");
+    await createCategory(name: "Best Seller", description: "Most popular products");
+    await createCategory(name: "Gifting", description: "Perfect gifts for loved ones");
+
+    // Example product
+    await createProduct(
+      id: "unique_wavy_ring",
+      name: "Unique Wavy Ring",
+      description: "A unique wavy ring for special occasions",
+      categories: ["new_arrival", "best_seller", "gifting"],
+      price: 2500,
+      stock: 10,
+      imageUrl: "https://res.cloudinary.com/duvm1rblo/image/upload/v1768298769/Unique_Wavy_Ring_dkprzd.webp",
+    );
   }
 }

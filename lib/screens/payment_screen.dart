@@ -1,7 +1,12 @@
 import 'package:flutter/material.dart';
 
 class PaymentScreen extends StatelessWidget {
-  const PaymentScreen({super.key});
+  final double total; // <-- add total here
+
+  const PaymentScreen({
+    super.key,
+    required this.total, // <-- required parameter
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -17,9 +22,9 @@ class PaymentScreen extends StatelessWidget {
               /// Top Bar
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  const Icon(Icons.arrow_back),
-                  const Text(
+                children: const [
+                  Icon(Icons.arrow_back),
+                  Text(
                     "Payment",
                     style: TextStyle(
                       fontSize: 30,
@@ -27,7 +32,7 @@ class PaymentScreen extends StatelessWidget {
                       fontFamily: "Serif",
                     ),
                   ),
-                  const Icon(Icons.menu),
+                  Icon(Icons.menu),
                 ],
               ),
 
@@ -137,16 +142,17 @@ class PaymentScreen extends StatelessWidget {
 
               const SizedBox(height: 15),
 
-              summaryRow("Item totals", "\$23.45"),
-              summaryRow("Handling Charge", "\$3.45"),
-              summaryRow("Delivery Charge", "\$5.45",
-                  subtitle: "Shop for \$2 more to get free delivery"),
+              // Instead of hard-coded totals, show actual total
+              summaryRow("Item totals", "₹${total.toStringAsFixed(2)}"),
+              summaryRow("Handling Charge", "₹3.45"),
+              summaryRow("Delivery Charge", "₹5.45",
+                  subtitle: "Shop for ₹2 more to get free delivery"),
 
               const Divider(height: 30),
 
               summaryRow(
                 "Grand Total",
-                "\$31.45",
+                "₹${(total + 3.45 + 5.45).toStringAsFixed(2)}",
                 isBold: true,
               ),
 

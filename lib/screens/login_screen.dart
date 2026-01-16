@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:jewelio/screens/home_screen.dart';
 import 'package:jewelio/screens/signup_screen.dart';
 
@@ -15,56 +14,85 @@ class _LoginScreenState extends State<LoginScreen> {
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
   final FirebaseAuth _auth = FirebaseAuth.instance;
-  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
-  bool isLoading = false;
+  bool isLoading = false; // Track login/loading state
 
+  // ------------------ LOGIN ------------------
   void login() async {
-    setState(() => isLoading = true);
+    final email = emailController.text.trim();
+    final password = passwordController.text.trim();
+
+    if (email.isEmpty || password.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Please enter email and password')),
+      );
+      return;
+    }
+
+    setState(() => isLoading = true); // Start loading
+
     try {
       await _auth.signInWithEmailAndPassword(
-        email: emailController.text.trim(),
-        password: passwordController.text.trim(),
+        email: email,
+        password: password,
       );
 
       if (!mounted) return;
-      ScaffoldMessenger.of(context)
-          .showSnackBar(const SnackBar(content: Text('Login Successful')));
 
-      Future.delayed(const Duration(seconds: 2), () {
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(builder: (context) => HomeScreen()),
-        );
-      });
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Login Successful')),
+      );
+
+      // Short loading delay to show spinner
+      await Future.delayed(const Duration(milliseconds: 500));
+
+      if (!mounted) return;
+
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (_) => const HomeScreen()),
+      );
     } catch (e) {
       if (!mounted) return;
       ScaffoldMessenger.of(context)
           .showSnackBar(SnackBar(content: Text('Login Failed: $e')));
     } finally {
-      if (mounted) setState(() => isLoading = false);
+      if (mounted) setState(() => isLoading = false); // Stop loading
     }
   }
 
+  // ------------------ RESET PASSWORD ------------------
   void resetPassword() async {
-    if (emailController.text.isEmpty) return;
+    final email = emailController.text.trim();
+    if (email.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Please enter your email')),
+      );
+      return;
+    }
+
+    setState(() => isLoading = true); // Show loading while sending email
     try {
-      await _auth.sendPasswordResetEmail(email: emailController.text.trim());
+      await _auth.sendPasswordResetEmail(email: email);
       if (!mounted) return;
+
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('Password reset email sent')),
       );
     } catch (e) {
       if (!mounted) return;
+
       ScaffoldMessenger.of(context)
           .showSnackBar(SnackBar(content: Text('Reset failed: $e')));
+    } finally {
+      if (mounted) setState(() => isLoading = false);
     }
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xffF8F5EB), // Cream background
+      backgroundColor: const Color(0xffF8F5EB),
       body: SingleChildScrollView(
         child: Column(
           children: [
@@ -85,28 +113,18 @@ class _LoginScreenState extends State<LoginScreen> {
             ),
 
             const SizedBox(height: 20),
-
-           
             const Text(
               "Welcome Back!",
-              style: TextStyle(
-                fontSize: 32,
-                fontWeight: FontWeight.bold,
-                color: Colors.black87,
-              ),
+              style: TextStyle(fontSize: 32, fontWeight: FontWeight.bold, color: Colors.black87),
             ),
             const SizedBox(height: 5),
             const Text(
               "Enter your email and password",
-              style: TextStyle(
-                fontSize: 18,
-                color: Colors.grey,
-              ),
+              style: TextStyle(fontSize: 18, color: Colors.grey),
             ),
-
             const SizedBox(height: 35),
 
-        
+            // ----------- EMAIL FIELD -----------
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 30),
               child: Column(
@@ -116,18 +134,10 @@ class _LoginScreenState extends State<LoginScreen> {
                     children: const [
                       Icon(Icons.email_outlined, color: Colors.grey),
                       SizedBox(width: 10),
-                      Text(
-                        "Email",
-                        style: TextStyle(
-                          fontSize: 18,
-                          color: Colors.grey,
-                        ),
-                      ),
+                      Text("Email", style: TextStyle(fontSize: 18, color: Colors.grey)),
                     ],
                   ),
                   const SizedBox(height: 5),
-
-                  
                   TextField(
                     controller: emailController,
                     decoration: const InputDecoration(
@@ -137,10 +147,9 @@ class _LoginScreenState extends State<LoginScreen> {
                 ],
               ),
             ),
-
             const SizedBox(height: 25),
 
-            
+            // ----------- PASSWORD FIELD -----------
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 30),
               child: Column(
@@ -150,17 +159,10 @@ class _LoginScreenState extends State<LoginScreen> {
                     children: const [
                       Icon(Icons.lock_outline, color: Colors.grey),
                       SizedBox(width: 10),
-                      Text(
-                        "Password",
-                        style: TextStyle(
-                          fontSize: 18,
-                          color: Colors.grey,
-                        ),
-                      ),
+                      Text("Password", style: TextStyle(fontSize: 18, color: Colors.grey)),
                     ],
                   ),
                   const SizedBox(height: 5),
-
                   TextField(
                     controller: passwordController,
                     obscureText: true,
@@ -168,19 +170,14 @@ class _LoginScreenState extends State<LoginScreen> {
                       border: UnderlineInputBorder(),
                     ),
                   ),
-
                   const SizedBox(height: 8),
-
                   Align(
                     alignment: Alignment.centerRight,
                     child: GestureDetector(
                       onTap: resetPassword,
                       child: const Text(
                         "Forgot Password?",
-                        style: TextStyle(
-                          color: Colors.grey,
-                          fontWeight: FontWeight.w600,
-                        ),
+                        style: TextStyle(color: Colors.grey, fontWeight: FontWeight.w600),
                       ),
                     ),
                   ),
@@ -190,63 +187,52 @@ class _LoginScreenState extends State<LoginScreen> {
 
             const SizedBox(height: 35),
 
-    
-            isLoading
-                ? const CircularProgressIndicator()
-                : Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 30),
-                    child: ElevatedButton(
-                      onPressed: login,
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: const Color(0xffD84F4F),
-                        minimumSize: const Size(double.infinity, 55),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(40),
-                        ),
-                      ),
-                      child: const Text(
-                        "Log In",
-                        style: TextStyle(
-                          fontSize: 20,
+            // ----------- LOGIN BUTTON WITH SPINNER -----------
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 30),
+              child: ElevatedButton(
+                onPressed: isLoading ? null : login,
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: const Color(0xffD84F4F),
+                  minimumSize: const Size(double.infinity, 55),
+                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(40)),
+                ),
+                child: isLoading
+                    ? const SizedBox(
+                        height: 25,
+                        width: 25,
+                        child: CircularProgressIndicator(
                           color: Colors.white,
-                          letterSpacing: 1.2,
+                          strokeWidth: 3,
                         ),
+                      )
+                    : const Text(
+                        "Log In",
+                        style: TextStyle(fontSize: 20, color: Colors.white, letterSpacing: 1.2),
                       ),
-                    ),
-                  ),
+              ),
+            ),
 
             const SizedBox(height: 30),
 
-           
+            // ----------- OR DIVIDER -----------
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: const [
-                SizedBox(
-                  width: 110,
-                  child: Divider(thickness: 1, color: Colors.grey),
-                ),
-                Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 12),
-                  child: Text(
-                    "or",
-                    style: TextStyle(fontSize: 18),
-                  ),
-                ),
-                SizedBox(
-                  width: 110,
-                  child: Divider(thickness: 1, color: Colors.grey),
-                ),
+                SizedBox(width: 110, child: Divider(thickness: 1, color: Colors.grey)),
+                Padding(padding: EdgeInsets.symmetric(horizontal: 12), child: Text("or", style: TextStyle(fontSize: 18))),
+                SizedBox(width: 110, child: Divider(thickness: 1, color: Colors.grey)),
               ],
             ),
 
             const SizedBox(height: 30),
 
-           
+            // ----------- SIGNUP BUTTON -----------
             GestureDetector(
               onTap: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => const SignupScreen()),
+                  MaterialPageRoute(builder: (_) => const SignupScreen()),
                 );
               },
               child: Container(
@@ -257,14 +243,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   border: Border.all(color: Colors.grey.shade400),
                 ),
                 child: const Center(
-                  child: Text(
-                    "Sign up",
-                    style: TextStyle(
-                      fontSize: 20,
-                      color: Colors.black87,
-                      letterSpacing: 1.2,
-                    ),
-                  ),
+                  child: Text("Sign up", style: TextStyle(fontSize: 20, color: Colors.black87, letterSpacing: 1.2)),
                 ),
               ),
             ),

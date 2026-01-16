@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase/firebase_options.dart';
-import 'screens/onboarding_screen.dart'; 
+import 'package:jewelio/screens/onboarding_screen.dart';
+import 'package:jewelio/screens/home_screen.dart';
 
-void main() async {
+void main() {
   WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   runApp(const MyApp());
 }
 
@@ -14,57 +14,82 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Jewelio',
-      debugShowCheckedModeBanner: false,
-      home: const OnboardingScreen(), // ✅ changed (was LoginScreen)
+    // Using FutureBuilder to ensure Firebase is initialized before loading the app
+    return FutureBuilder(
+      future: Firebase.initializeApp(
+        options: DefaultFirebaseOptions.currentPlatform,
+      ),
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.done) {
+          return const MaterialApp(
+            debugShowCheckedModeBanner: false,
+            title: 'Jewelio',
+            home: RootScreen(), // decides between onboarding or home
+          );
+        }
+        if (snapshot.hasError) {
+          return MaterialApp(
+            home: Scaffold(
+              body: Center(
+                child: Text(
+                  'Firebase Initialization Error:\n${snapshot.error}',
+                  textAlign: TextAlign.center,
+                ),
+              ),
+            ),
+          );
+        }
+        // Loading state
+        return const MaterialApp(
+          home: Scaffold(
+            body: Center(child: CircularProgressIndicator()),
+          ),
+        );
+      },
     );
   }
 }
 
-
-class MyHomescreen extends StatefulWidget {
-  const MyHomescreen({super.key, required this.title});
-
-  final String title;
+/// RootScreen decides which screen to show: Onboarding or Home
+class RootScreen extends StatefulWidget {
+  const RootScreen({super.key});
 
   @override
-  State<MyHomescreen> createState() => _MyHomescreenState();
+  State<RootScreen> createState() => _RootScreenState();
 }
 
-class _MyHomescreenState extends State<MyHomescreen> {
-  int _counter = 0;
+class _RootScreenState extends State<RootScreen> {
+  bool _isLoading = true;
+  bool _seenOnboarding = false; // this will be loaded from SharedPreferences later
 
-  void _incrementCounter() {
+  @override
+  void initState() {
+    super.initState();
+    _checkOnboarding();
+  }
+
+  Future<void> _checkOnboarding() async {
+    // Simulate async loading, e.g., from SharedPreferences
+    await Future.delayed(const Duration(seconds: 1));
+
+  
+
     setState(() {
-      _counter++;
+      _isLoading = false;
+      _seenOnboarding = false; // set true if onboarding already done
     });
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(widget.title),
-        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-      ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            const Text('You have pushed the button this many times:'),
-            Text(
-              '$_counter',
-              style: Theme.of(context).textTheme.headlineMedium,
-            ),
-          ],
-        ),
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
-        tooltip: 'Increment',
-        child: const Icon(Icons.add),
-      ),
-    );
+    if (_isLoading) {
+      return const Scaffold(
+        body: Center(child: CircularProgressIndicator()),
+      );
+    }
+
+    return _seenOnboarding
+        ? const HomeScreen()       // Show HomeScreen if onboarding is done
+        : const OnboardingScreen(); // Otherwise show Onboarding
   }
 }

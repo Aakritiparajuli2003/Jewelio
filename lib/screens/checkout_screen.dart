@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class CheckoutScreen extends StatelessWidget {
-  const CheckoutScreen({Key? key}) : super(key: key);
+  const CheckoutScreen({super.key}); // ✅ super parameter used
 
   @override
   Widget build(BuildContext context) {
@@ -21,14 +21,12 @@ class CheckoutScreen extends StatelessWidget {
         ),
         centerTitle: true,
       ),
-
       body: Padding(
         padding: const EdgeInsets.all(16),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-
-            // Step Indicator (Payment Active)
+            // Step Indicator
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: const [
@@ -39,9 +37,7 @@ class CheckoutScreen extends StatelessWidget {
                 _StepItem("3", "Order Placed", false),
               ],
             ),
-
             const SizedBox(height: 30),
-
             // Delivery Address
             const Text(
               "Delivery Address",
@@ -68,17 +64,13 @@ class CheckoutScreen extends StatelessWidget {
                 ],
               ),
             ),
-
             const SizedBox(height: 25),
-
             // Payment Method
             const Text(
               "Payment Method",
               style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
             ),
-
             const SizedBox(height: 10),
-
             _PaymentTile(
               icon: Icons.money,
               title: "Cash On Delivery",
@@ -94,9 +86,7 @@ class CheckoutScreen extends StatelessWidget {
               title: "Wallet",
               selected: false,
             ),
-
             const Spacer(),
-
             // Bill Summary
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -112,7 +102,6 @@ class CheckoutScreen extends StatelessWidget {
           ],
         ),
       ),
-
       // Bottom Button
       bottomNavigationBar: Padding(
         padding: const EdgeInsets.all(12),
@@ -207,8 +196,7 @@ class _PaymentTile extends StatelessWidget {
               style:
                   const TextStyle(fontSize: 16, fontWeight: FontWeight.w500)),
           const Spacer(),
-          if (selected)
-            const Icon(Icons.check_circle, color: Colors.red),
+          if (selected) const Icon(Icons.check_circle, color: Colors.red),
         ],
       ),
     );

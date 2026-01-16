@@ -1,49 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'home_screen.dart';
-import 'product_detail.dart'; // import ProductDetailsPage
+import 'product_detail.dart';
 
 class ExplorePage extends StatelessWidget {
   ExplorePage({super.key});
 
-  final List<Map<String, String>> products = [
-    {
-      "image": "assets/p1.jpg",
-      "price": "\$23.33",
-      "text": "Delicate gold necklace and matching stud earrings.",
-    },
-    {
-      "image": "assets/p2.jpg",
-      "price": "\$12.53",
-      "text": "Delicate gold necklace and matching stud earrings.",
-    },
-    {
-      "image": "assets/p3.jpg",
-      "price": "\$33.63",
-      "text": "Delicate gold necklace and matching stud earrings.",
-    },
-    {
-      "image": "assets/p4.jpg",
-      "price": "\$13.23",
-      "text": "Delicate gold necklace and matching stud earrings.",
-    },
-    {
-      "image": "assets/p5.jpg",
-      "price": "\$18.90",
-      "text": "Delicate gold necklace and matching stud earrings.",
-    },
-    {
-      "image": "assets/p6.jpg",
-      "price": "\$20.11",
-      "text": "Delicate gold necklace and matching stud earrings.",
-    },
-  ];
+  final FirebaseFirestore firestore = FirebaseFirestore.instance;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-
       appBar: AppBar(
         backgroundColor: Colors.white,
         elevation: 0,
@@ -62,7 +31,6 @@ class ExplorePage extends StatelessWidget {
           SizedBox(width: 15),
         ],
       ),
-
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 18),
         child: Column(
@@ -91,72 +59,108 @@ class ExplorePage extends StatelessWidget {
 
             const SizedBox(height: 20),
 
-            // 🛍 Product Grid
+            // 🛍 Firestore Product Grid
             Expanded(
-              child: GridView.builder(
-                itemCount: products.length,
-                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 2,
-                  crossAxisSpacing: 12,
-                  mainAxisSpacing: 12,
-                  childAspectRatio: 0.70,
-                ),
-                itemBuilder: (context, index) {
-                  final product = products[index];
+              child: StreamBuilder<QuerySnapshot>(
+                stream: firestore
+                    .collection('products')
+                    .orderBy('created_at', descending: true)
+                    .snapshots(),
+                builder: (context, snapshot) {
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return const Center(child: CircularProgressIndicator());
+                  }
 
-                  return GestureDetector(
-                    onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (_) => const ProductDetailsPage(),
+                  if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
+                    return const Center(child: Text("No products available"));
+                  }
+
+                  final products = snapshot.data!.docs;
+
+                  return GridView.builder(
+                    itemCount: products.length,
+                    gridDelegate:
+                        const SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: 2,
+                      crossAxisSpacing: 12,
+                      mainAxisSpacing: 12,
+                      childAspectRatio: 0.70,
+                    ),
+                    itemBuilder: (context, index) {
+                      final product = products[index];
+                      final data = product.data() as Map<String, dynamic>;
+
+                      // ✅ SAFE DATA ACCESS
+                      final String image =
+                          data['image'] ?? data['imageUrl'] ?? 'https://via.placeholder.com/300';
+                      final String name = data['name'] ?? 'No Name';
+                      final price = data['price'] ?? 0;
+
+                      return GestureDetector(
+                        onTap: () {
+                          // ✅ Navigate to Product Detail Page
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (_) => ProductDetailPage(product: data),
+                            ),
+                          );
+                        },
+                        child: Container(
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(14),
+                            border: Border.all(color: Colors.black12),
+                          ),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              ClipRRect(
+                                borderRadius:
+                                    const BorderRadius.vertical(top: Radius.circular(14)),
+                                child: Image.network(
+                                  image,
+                                  height: 130,
+                                  width: double.infinity,
+                                  fit: BoxFit.cover,
+                                  errorBuilder: (context, error, stackTrace) {
+                                    return Container(
+                                      height: 130,
+                                      color: Colors.grey.shade200,
+                                      child: const Icon(
+                                        Icons.image_not_supported,
+                                        size: 40,
+                                      ),
+                                    );
+                                  },
+                                ),
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.all(10),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      "RS $price",
+                                      style: GoogleFonts.poppins(
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.w600,
+                                      ),
+                                    ),
+                                    const SizedBox(height: 6),
+                                    Text(
+                                      name,
+                                      maxLines: 2,
+                                      overflow: TextOverflow.ellipsis,
+                                      style: GoogleFonts.poppins(fontSize: 12),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ],
+                          ),
                         ),
                       );
                     },
-                    child: Container(
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(14),
-                        border: Border.all(color: Colors.black12),
-                      ),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          ClipRRect(
-                            borderRadius: const BorderRadius.vertical(
-                              top: Radius.circular(14),
-                            ),
-                            child: Image.asset(
-                              product["image"]!,
-                              height: 130,
-                              width: double.infinity,
-                              fit: BoxFit.cover,
-                            ),
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.all(10),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  product["price"]!,
-                                  style: GoogleFonts.poppins(
-                                    fontSize: 16,
-                                    fontWeight: FontWeight.w600,
-                                  ),
-                                ),
-                                const SizedBox(height: 6),
-                                Text(
-                                  product["text"]!,
-                                  maxLines: 2,
-                                  overflow: TextOverflow.ellipsis,
-                                  style: GoogleFonts.poppins(fontSize: 12),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
                   );
                 },
               ),
@@ -165,6 +169,7 @@ class ExplorePage extends StatelessWidget {
         ),
       ),
 
+      // 🔻 Bottom Navigation
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: 1,
         selectedItemColor: Colors.redAccent,
