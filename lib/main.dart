@@ -3,6 +3,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'firebase/firebase_options.dart';
 import 'package:jewelio/screens/onboarding_screen.dart';
 import 'package:jewelio/screens/home_screen.dart';
+import 'package:jewelio/screens/cart_screen.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();

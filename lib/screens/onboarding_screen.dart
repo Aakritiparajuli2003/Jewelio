@@ -191,7 +191,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                       );
                     },
                     child: const Text(
-                      'Sign in',
+                      'LOGIN',
                       style: TextStyle(
                         color: Color(0xFFE05252),
                         fontWeight: FontWeight.bold,

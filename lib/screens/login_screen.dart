@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import 'package:jewelio/screens/home_screen.dart';
 import 'package:jewelio/screens/signup_screen.dart';
 
@@ -15,10 +16,10 @@ class _LoginScreenState extends State<LoginScreen> {
   final TextEditingController passwordController = TextEditingController();
   final FirebaseAuth _auth = FirebaseAuth.instance;
 
-  bool isLoading = false; // Track login/loading state
+  bool isLoading = false;
 
-  // ------------------ LOGIN ------------------
-  void login() async {
+  // ------------------ EMAIL/PASSWORD LOGIN ------------------
+  Future<void> login() async {
     final email = emailController.text.trim();
     final password = passwordController.text.trim();
 
@@ -29,22 +30,13 @@ class _LoginScreenState extends State<LoginScreen> {
       return;
     }
 
-    setState(() => isLoading = true); // Start loading
+    setState(() => isLoading = true);
 
     try {
       await _auth.signInWithEmailAndPassword(
         email: email,
         password: password,
       );
-
-      if (!mounted) return;
-
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Login Successful')),
-      );
-
-      // Short loading delay to show spinner
-      await Future.delayed(const Duration(milliseconds: 500));
 
       if (!mounted) return;
 
@@ -55,15 +47,54 @@ class _LoginScreenState extends State<LoginScreen> {
     } catch (e) {
       if (!mounted) return;
       ScaffoldMessenger.of(context)
-          .showSnackBar(SnackBar(content: Text('Login Failed: $e')));
+          .showSnackBar(SnackBar(content: Text('Login failed: $e')));
     } finally {
-      if (mounted) setState(() => isLoading = false); // Stop loading
+      if (mounted) setState(() => isLoading = false);
+    }
+  }
+
+  // ------------------ GOOGLE SIGN-IN ------------------
+  Future<void> signInWithGoogle() async {
+    setState(() => isLoading = true);
+
+    try {
+      final GoogleSignInAccount? googleUser =
+          await GoogleSignIn().signIn();
+
+      if (googleUser == null) {
+        setState(() => isLoading = false);
+        return;
+      }
+
+      final GoogleSignInAuthentication googleAuth =
+          await googleUser.authentication;
+
+      final credential = GoogleAuthProvider.credential(
+        accessToken: googleAuth.accessToken,
+        idToken: googleAuth.idToken,
+      );
+
+      await FirebaseAuth.instance.signInWithCredential(credential);
+
+      if (!mounted) return;
+
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (_) => const HomeScreen()),
+      );
+    } catch (e) {
+      if (!mounted) return;
+      ScaffoldMessenger.of(context)
+          .showSnackBar(SnackBar(content: Text('Google Sign-In failed: $e')));
+    } finally {
+      if (mounted) setState(() => isLoading = false);
     }
   }
 
   // ------------------ RESET PASSWORD ------------------
-  void resetPassword() async {
+  Future<void> resetPassword() async {
     final email = emailController.text.trim();
+
     if (email.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('Please enter your email')),
@@ -71,7 +102,8 @@ class _LoginScreenState extends State<LoginScreen> {
       return;
     }
 
-    setState(() => isLoading = true); // Show loading while sending email
+    setState(() => isLoading = true);
+
     try {
       await _auth.sendPasswordResetEmail(email: email);
       if (!mounted) return;
@@ -81,7 +113,6 @@ class _LoginScreenState extends State<LoginScreen> {
       );
     } catch (e) {
       if (!mounted) return;
-
       ScaffoldMessenger.of(context)
           .showSnackBar(SnackBar(content: Text('Reset failed: $e')));
     } finally {
@@ -89,6 +120,7 @@ class _LoginScreenState extends State<LoginScreen> {
     }
   }
 
+  // ------------------ UI ------------------
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -96,7 +128,6 @@ class _LoginScreenState extends State<LoginScreen> {
       body: SingleChildScrollView(
         child: Column(
           children: [
-            // ----------- HEADER IMAGE -----------
             ClipRRect(
               borderRadius: const BorderRadius.only(
                 bottomLeft: Radius.circular(120),
@@ -115,79 +146,53 @@ class _LoginScreenState extends State<LoginScreen> {
             const SizedBox(height: 20),
             const Text(
               "Welcome Back!",
-              style: TextStyle(fontSize: 32, fontWeight: FontWeight.bold, color: Colors.black87),
+              style: TextStyle(fontSize: 32, fontWeight: FontWeight.bold),
             ),
             const SizedBox(height: 5),
             const Text(
               "Enter your email and password",
               style: TextStyle(fontSize: 18, color: Colors.grey),
             ),
+
             const SizedBox(height: 35),
 
-            // ----------- EMAIL FIELD -----------
+            // EMAIL
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 30),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Row(
-                    children: const [
-                      Icon(Icons.email_outlined, color: Colors.grey),
-                      SizedBox(width: 10),
-                      Text("Email", style: TextStyle(fontSize: 18, color: Colors.grey)),
-                    ],
-                  ),
-                  const SizedBox(height: 5),
-                  TextField(
-                    controller: emailController,
-                    decoration: const InputDecoration(
-                      border: UnderlineInputBorder(),
-                    ),
-                  ),
-                ],
+              child: TextField(
+                controller: emailController,
+                decoration: const InputDecoration(
+                  labelText: "Email",
+                  border: UnderlineInputBorder(),
+                ),
               ),
             ),
+
             const SizedBox(height: 25),
 
-            // ----------- PASSWORD FIELD -----------
+            // PASSWORD
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 30),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Row(
-                    children: const [
-                      Icon(Icons.lock_outline, color: Colors.grey),
-                      SizedBox(width: 10),
-                      Text("Password", style: TextStyle(fontSize: 18, color: Colors.grey)),
-                    ],
-                  ),
-                  const SizedBox(height: 5),
-                  TextField(
-                    controller: passwordController,
-                    obscureText: true,
-                    decoration: const InputDecoration(
-                      border: UnderlineInputBorder(),
-                    ),
-                  ),
-                  const SizedBox(height: 8),
-                  Align(
-                    alignment: Alignment.centerRight,
-                    child: GestureDetector(
-                      onTap: resetPassword,
-                      child: const Text(
-                        "Forgot Password?",
-                        style: TextStyle(color: Colors.grey, fontWeight: FontWeight.w600),
-                      ),
-                    ),
-                  ),
-                ],
+              child: TextField(
+                controller: passwordController,
+                obscureText: true,
+                decoration: const InputDecoration(
+                  labelText: "Password",
+                  border: UnderlineInputBorder(),
+                ),
               ),
             ),
 
-            const SizedBox(height: 35),
+            const SizedBox(height: 10),
 
-            // ----------- LOGIN BUTTON WITH SPINNER -----------
+            TextButton(
+              onPressed: resetPassword,
+              child: const Text("Forgot Password?"),
+            ),
+
+            const SizedBox(height: 25),
+
+            // LOGIN BUTTON
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 30),
               child: ElevatedButton(
@@ -195,60 +200,73 @@ class _LoginScreenState extends State<LoginScreen> {
                 style: ElevatedButton.styleFrom(
                   backgroundColor: const Color(0xffD84F4F),
                   minimumSize: const Size(double.infinity, 55),
-                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(40)),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(40),
+                  ),
                 ),
                 child: isLoading
-                    ? const SizedBox(
-                        height: 25,
-                        width: 25,
-                        child: CircularProgressIndicator(
-                          color: Colors.white,
-                          strokeWidth: 3,
-                        ),
-                      )
+                    ? const CircularProgressIndicator(color: Colors.white)
                     : const Text(
                         "Log In",
-                        style: TextStyle(fontSize: 20, color: Colors.white, letterSpacing: 1.2),
+                        style: TextStyle(fontSize: 20),
                       ),
               ),
             ),
 
             const SizedBox(height: 30),
 
-            // ----------- OR DIVIDER -----------
+            // OR
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: const [
-                SizedBox(width: 110, child: Divider(thickness: 1, color: Colors.grey)),
-                Padding(padding: EdgeInsets.symmetric(horizontal: 12), child: Text("or", style: TextStyle(fontSize: 18))),
-                SizedBox(width: 110, child: Divider(thickness: 1, color: Colors.grey)),
+                SizedBox(width: 100, child: Divider()),
+                Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 12),
+                  child: Text("or"),
+                ),
+                SizedBox(width: 100, child: Divider()),
               ],
             ),
 
             const SizedBox(height: 30),
 
-            // ----------- SIGNUP BUTTON -----------
-            GestureDetector(
-              onTap: () {
+            // GOOGLE SIGN-IN
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 30),
+              child: SizedBox(
+                height: 56,
+                width: double.infinity,
+                child: OutlinedButton.icon(
+                  onPressed: isLoading ? null : signInWithGoogle,
+                  icon: Image.asset(
+                    'assets/google1.png',
+                    height: 22,
+                  ),
+                  label: const Text(
+                    'Sign in with Google',
+                    style: TextStyle(fontSize: 16, color: Colors.black),
+                  ),
+                ),
+              ),
+            ),
+
+            const SizedBox(height: 30),
+
+            // SIGN UP
+            TextButton(
+              onPressed: () {
                 Navigator.push(
                   context,
                   MaterialPageRoute(builder: (_) => const SignupScreen()),
                 );
               },
-              child: Container(
-                width: 250,
-                padding: const EdgeInsets.symmetric(vertical: 14),
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(40),
-                  border: Border.all(color: Colors.grey.shade400),
-                ),
-                child: const Center(
-                  child: Text("Sign up", style: TextStyle(fontSize: 20, color: Colors.black87, letterSpacing: 1.2)),
-                ),
+              child: const Text(
+                "Don’t have an account? Sign up",
+                style: TextStyle(fontSize: 16),
               ),
             ),
 
-            const SizedBox(height: 40),
+            const SizedBox(height: 30),
           ],
         ),
       ),

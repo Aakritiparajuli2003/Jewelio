@@ -1,17 +1,22 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import '../provider/cart_provider.dart';
 
-class ProductDetailPage extends StatefulWidget {
-  final Map<String, dynamic> product; // Accept product data
+class ProductDetail extends StatefulWidget {
+  final Map<String, dynamic> product;
+  final String currentUserId; // pass logged-in user ID
 
-  const ProductDetailPage({super.key, required this.product});
+  const ProductDetail({super.key, required this.product, required this.currentUserId});
 
   @override
-  State<ProductDetailPage> createState() => _ProductDetailPageState();
+  State<ProductDetail> createState() => _ProductDetailPageState();
 }
 
-class _ProductDetailPageState extends State<ProductDetailPage> {
+class _ProductDetailPageState extends State<ProductDetail> {
   int quantity = 1;
   int selectedColor = 0;
+  bool isWishlisted = false;
 
   final List<Color> colors = [
     const Color(0xFFE95B3A),
@@ -19,9 +24,74 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
     Colors.black,
   ];
 
+  double averageRating = 0;
+  int reviewCount = 0;
+  double userRating = 5;
+  final TextEditingController commentController = TextEditingController();
+
+  @override
+  void initState() {
+    super.initState();
+    fetchRatings();
+  }
+
+  // 🔹 Fetch ratings safely
+  Future<void> fetchRatings() async {
+    final reviewsSnapshot = await FirebaseFirestore.instance
+        .collection('products')
+        .doc(widget.product['id'])
+        .collection('reviews')
+        .get();
+
+    final reviews = reviewsSnapshot.docs;
+    if (reviews.isEmpty) {
+      if (!mounted) return;
+      setState(() {
+        averageRating = 0;
+        reviewCount = 0;
+      });
+      return;
+    }
+
+    double totalRating = 0;
+    for (var review in reviews) {
+      totalRating += review['rating'];
+    }
+
+    if (!mounted) return;
+    setState(() {
+      averageRating = double.parse((totalRating / reviews.length).toStringAsFixed(1));
+      reviewCount = reviews.length;
+    });
+  }
+
+  // 🔹 Submit review safely
+  Future<void> submitReview() async {
+    if (commentController.text.isEmpty) return;
+
+    await FirebaseFirestore.instance
+        .collection('products')
+        .doc(widget.product['id'])
+        .collection('reviews')
+        .add({
+      'user_id': widget.currentUserId,
+      'rating': userRating,
+      'comment': commentController.text,
+      'created_at': FieldValue.serverTimestamp(),
+    });
+
+    commentController.clear();
+    await fetchRatings();
+
+    if (!mounted) return; // Prevent async context error
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(content: Text("Review submitted!")),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
-    final product = widget.product; // Use product passed from StorePage
+    final product = widget.product;
 
     return Scaffold(
       backgroundColor: const Color(0xFFFFFBF5),
@@ -32,19 +102,22 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
           icon: const Icon(Icons.arrow_back, color: Colors.black),
           onPressed: () => Navigator.pop(context),
         ),
+        centerTitle: true,
         title: const Text(
           "Product Details",
           style: TextStyle(
-            color: Colors.black,
-            fontFamily: "Serif",
             fontSize: 22,
+            fontFamily: "Serif",
+            color: Colors.black,
           ),
         ),
-        centerTitle: true,
-        actions: const [
-          Padding(
-            padding: EdgeInsets.only(right: 12),
-            child: Icon(Icons.favorite_border, color: Colors.black),
+        actions: [
+          IconButton(
+            icon: Icon(
+              isWishlisted ? Icons.favorite : Icons.favorite_border,
+              color: isWishlisted ? Colors.red : Colors.black,
+            ),
+            onPressed: () => setState(() => isWishlisted = !isWishlisted),
           )
         ],
       ),
@@ -53,31 +126,31 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // Product Image
+            // 🔹 PRODUCT IMAGE
             ClipRRect(
               borderRadius: BorderRadius.circular(24),
               child: Image.network(
-                product['img'], // dynamically use product image
-                height: 280,
+                product['img'],
+                height: 300,
                 width: double.infinity,
                 fit: BoxFit.cover,
               ),
             ),
 
-            const SizedBox(height: 10),
+            const SizedBox(height: 12),
 
-            // Image indicators
+            // 🔹 IMAGE DOTS
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: List.generate(
                 3,
-                (index) => Container(
+                (i) => Container(
                   margin: const EdgeInsets.symmetric(horizontal: 4),
                   height: 8,
                   width: 8,
                   decoration: BoxDecoration(
                     shape: BoxShape.circle,
-                    color: index == 0 ? Colors.black : Colors.grey,
+                    color: i == 0 ? Colors.black : Colors.grey,
                   ),
                 ),
               ),
@@ -85,9 +158,8 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
 
             const SizedBox(height: 20),
 
-            // Product name and rating
+            // 🔹 TITLE + RATING
             Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Expanded(
                   child: Text(
@@ -98,60 +170,38 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                     ),
                   ),
                 ),
-                Row(
-                  children: [
-                    const Icon(Icons.star, color: Colors.red, size: 18),
-                    const SizedBox(width: 4),
-                    Text(
-                      "${product['rating']} (${product['reviews']} Reviews)",
-                      style: const TextStyle(fontSize: 14),
-                    ),
-                  ],
+                const Icon(Icons.star, color: Colors.red, size: 18),
+                const SizedBox(width: 4),
+                Text(
+                  "$averageRating ($reviewCount Reviews)",
                 ),
               ],
             ),
 
-            const SizedBox(height: 10),
+            const SizedBox(height: 12),
 
-            // Description (static example, can be updated per product)
-            RichText(
-              text: const TextSpan(
-                style: TextStyle(color: Colors.black87, fontSize: 14),
-                children: [
-                  TextSpan(
-                    text:
-                        "This jewelry piece features a modern design, crafted with precision and elegance.",
-                  ),
-                  TextSpan(
-                    text: " Read More",
-                    style: TextStyle(
-                      color: Colors.red,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                ],
-              ),
-            ),
-
-            const SizedBox(height: 20),
-
-            // Price
-            const Text(
-              "Price",
-              style: TextStyle(fontSize: 16),
-            ),
-            const SizedBox(height: 6),
+            // 🔹 DESCRIPTION
             Text(
-              "RS ${product['price']}",
+              product['description'],
+              style: const TextStyle(color: Colors.black87),
+            ),
+
+            const SizedBox(height: 24),
+
+            // 🔹 PRICE
+            const Text("Price"),
+            const SizedBox(height: 4),
+            Text(
+              "Rs ${product['price']}",
               style: const TextStyle(
-                fontSize: 26,
+                fontSize: 28,
                 fontWeight: FontWeight.bold,
               ),
             ),
 
             const SizedBox(height: 20),
 
-            // Color options
+            // 🔹 COLORS
             Row(
               children: List.generate(
                 colors.length,
@@ -175,11 +225,11 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
 
             const SizedBox(height: 30),
 
-            // Quantity and Add to Cart
+            // 🔹 QUANTITY + ADD TO CART
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                // Quantity box
+                // Quantity
                 Container(
                   decoration: BoxDecoration(
                     border: Border.all(color: Colors.grey),
@@ -190,9 +240,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                       IconButton(
                         icon: const Icon(Icons.remove),
                         onPressed: () {
-                          if (quantity > 1) {
-                            setState(() => quantity--);
-                          }
+                          if (quantity > 1) setState(() => quantity--);
                         },
                       ),
                       Text(
@@ -201,15 +249,13 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                       ),
                       IconButton(
                         icon: const Icon(Icons.add),
-                        onPressed: () {
-                          setState(() => quantity++);
-                        },
+                        onPressed: () => setState(() => quantity++),
                       ),
                     ],
                   ),
                 ),
 
-                // Add to cart button
+                // Add to cart
                 ElevatedButton(
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.red,
@@ -220,7 +266,14 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                     ),
                   ),
                   onPressed: () {
-                    // Add to cart logic here
+                    Provider.of<CartProvider>(context, listen: false)
+                        .addToCart(product, quantity);
+
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(
+                        content: Text("Added to cart 🛒"),
+                      ),
+                    );
                   },
                   child: const Text(
                     "Add to cart",
@@ -228,6 +281,43 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                   ),
                 ),
               ],
+            ),
+
+            const SizedBox(height: 30),
+
+            // 🔹 ADD REVIEW SECTION
+            const Text(
+              "Add Your Review",
+              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+            ),
+            const SizedBox(height: 10),
+            Text("Your Rating: $userRating"),
+            Slider(
+              value: userRating,
+              min: 1,
+              max: 5,
+              divisions: 4,
+              label: "$userRating",
+              onChanged: (value) {
+                setState(() => userRating = value);
+              },
+            ),
+            TextField(
+              controller: commentController,
+              decoration: const InputDecoration(
+                hintText: "Write your review",
+                border: OutlineInputBorder(),
+              ),
+            ),
+            const SizedBox(height: 10),
+            ElevatedButton(
+              onPressed: submitReview,
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.red,
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 40, vertical: 16),
+              ),
+              child: const Text("Submit Review"),
             ),
           ],
         ),
