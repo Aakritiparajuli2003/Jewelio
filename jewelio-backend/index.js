@@ -31,6 +31,7 @@ app.use('/api/orders', ordersRoutes);
 app.use('/api/customers', customersRoutes);
 app.use('/api/dashboard', dashboardRoutes);
 
+
 // Root route - redirect to login
 app.get("/", (req, res) => {
   res.redirect('/views/login.html');

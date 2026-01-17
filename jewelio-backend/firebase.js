@@ -22,7 +22,7 @@ const initializeFirebase = () => {
       } catch (initErr) {
         console.error("❌ Failed to initialize Firebase with environment variables:", initErr.message);
       }
-    }
+    }        
 
     // 2. Try Service Account JSON File
     try {

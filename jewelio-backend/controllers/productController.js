@@ -48,26 +48,32 @@ exports.getProductById = async (req, res) => {
 // POST new product
 exports.createProduct = async (req, res) => {
     try {
-        const { name, price, category, description, image, stock } = req.body;
+        const { name, price, tags,category, description, image, stock } = req.body;
 
         if (!name || !price) {
             return res.status(400).json({ error: 'Name and price are required' });
         }
 
-        const productData = {
-            name,
-            price: parseFloat(price),
-            category_id: category || 'Uncategorized',
-            description: description || '',
-            image_url: image || '',
-            stock: parseInt(stock) || 0,
-            created_at: admin.firestore.FieldValue.serverTimestamp()
-        };
+       const productData = {
+    name,
+    price: parseFloat(price),
+    tags: tags || [],
+    category_id: category || 'Uncategorized',
+    description: description || '',
+    image_url: image || '',
+    stock: parseInt(stock) || 0,
+    // Logic: Check if the tag exists in the array
+            is_new: tags ? tags.includes('New Product') : false,
+            is_best_seller: tags ? tags.includes('Best Seller') : false,
+            is_gifting: tags ? tags.includes('Gift') : false,
+    created_at: admin.firestore.FieldValue.serverTimestamp()
+};
 
         const docRef = await db.collection('products').add(productData);
 
         res.status(201).json({ id: docRef.id, ...productData });
     } catch (error) {
+        console.error("CREATE ERROR:", error); // Logs actual error to your terminal
         res.status(500).json({ error: error.message });
     }
 };
@@ -104,3 +110,4 @@ exports.deleteProduct = async (req, res) => {
         res.status(500).json({ error: error.message });
     }
 };
+
