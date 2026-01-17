@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'product_detail.dart';
+import 'product_detail.dart'; // ✅ keep this import
 import 'category_products_screen.dart';
 
 class StorePage extends StatefulWidget {
@@ -177,10 +177,14 @@ class _StorePageState extends State<StorePage> {
 
                 return GestureDetector(
                   onTap: () {
+                    // ✅ FIX: Use ProductDetail instead of ProductDetailPage
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (_) => ProductDetailPage(product: product),
+                        builder: (_) => ProductDetail(
+                          product: product,
+                          currentUserId: "current_user_id_here", // replace with actual user ID
+                        ),
                       ),
                     );
                   },
